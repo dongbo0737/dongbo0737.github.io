@@ -16,6 +16,10 @@ logstash 一个ELK架构中，专门用来进行接受数据进行处理，可�
 logstash安装很简单，推荐使用tar包下载，解压
 
 
+
+
+
+
 ## logstash.yml
 
 	//配置文件，以英文为准
