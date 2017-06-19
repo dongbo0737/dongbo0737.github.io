@@ -64,4 +64,4 @@ tags: logstash config
 
 ### 6.找到具体异常的对象
 
-![第六步](/images/eclipse-memory-analyzer/6.png)
+![第六步](/images/eclipse-memory-analyzer/7.png)
