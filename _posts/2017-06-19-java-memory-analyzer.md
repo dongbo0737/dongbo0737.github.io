@@ -2,8 +2,8 @@
 layout: post
 title:  "Eclipse Memory Analyzer 堆转储文件分析"
 date:   2017-06-19
-categories: logstash
-tags: logstash config
+categories: java eclipse memory
+tags: java eclipse memory
 ---
 
 * content
