@@ -3,7 +3,7 @@ layout: post
 title:  "docker容器垮主机访问"
 date:   2017-06-13
 categories: docker
-tags: docker exception
+tags: docker
 ---
 
 * content

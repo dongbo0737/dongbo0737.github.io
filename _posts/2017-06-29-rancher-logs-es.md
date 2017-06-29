@@ -2,8 +2,8 @@
 layout: post
 title:  "Rancher日志搜集"
 date:   2017-06-29
-categories: docker rancher
-tags: docker rancher
+categories: docker rancher logstash logspout elasticsearch
+tags: docker rancher logstash logspout elasticsearch
 ---
 
 * content

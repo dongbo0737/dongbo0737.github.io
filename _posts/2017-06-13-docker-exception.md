@@ -2,7 +2,7 @@
 layout: post
 title:  "docker遇到的异常和注意点"
 date:   2017-06-13
-categories: docker
+categories: docker exception
 tags: docker exception
 ---
 
