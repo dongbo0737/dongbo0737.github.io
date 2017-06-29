@@ -2,8 +2,8 @@
 layout: post
 title:  "Logtash遇到的异常和注意点"
 date:   2017-06-13
-categories: logstash
-tags: logstash config
+categories: logstash exception
+tags: logstash exception
 ---
 
 * content

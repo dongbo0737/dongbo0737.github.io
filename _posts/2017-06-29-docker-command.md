@@ -122,3 +122,7 @@ docker load是导入镜像到本地镜像库，docker import 导入一个容器�
 	docker cp containerId:/path/xxx /host/path/target/xxx
 
 	docker cp /host/path/target/xxx containerId:/path/xxx
+
+#### 查询日志
+
+	sudo docker logs -f containerId
