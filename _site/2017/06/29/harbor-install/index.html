@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Harbor 安装和使用</title>
+    <meta name="description" content="Project Harbor是一个企业级registry服务器，用于存储和分发Docker镜像。 Harbor通过添加企业通常需要的功能（如安全性，身份和管理）来扩展开源Docker Distribution。作为企业私人registry机构，Harbor提供更好的性能和安全性。使registry更接近构建和运行...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://localhost:4000/2017/06/29/harbor-install/">
+    <link rel="alternate" type="application/rss+xml" title="DongBo" href="http://localhost:4000/feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?cf8506e0ef223e57ff6239944e5d46a4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+    <script>
+    // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-72449510-4', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">DongBo</a>
+        <small>Front-end Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/demo/">
+                        
+                            <i class="fa fa-play"></i>Demo
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Harbor 安装和使用</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-06-29
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#docker" title="Category: docker" rel="category">docker</a>&nbsp;
+    
+        <a href="/category/#harbor" title="Category: harbor" rel="category">harbor</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#docker" title="Tag: docker" rel="tag">docker</a-->
+        <a href="/tag/#docker" title="Tag: docker" rel="tag">docker</a>&nbsp;
+    
+        <!--a href="/tag/#harbor" title="Tag: harbor" rel="tag">harbor</a-->
+        <a href="/tag/#harbor" title="Tag: harbor" rel="tag">harbor</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#harbor-安装" id="markdown-toc-harbor-安装">Harbor 安装</a>    <ul>
+      <li><a href="#下载-harbor" id="markdown-toc-下载-harbor">下载 harbor</a></li>
+      <li><a href="#docker-compose" id="markdown-toc-docker-compose">docker-compose</a></li>
+      <li><a href="#查看效果" id="markdown-toc-查看效果">查看效果</a></li>
+    </ul>
+  </li>
+  <li><a href="#harbor使用" id="markdown-toc-harbor使用">Harbor使用</a>    <ul>
+      <li><a href="#登陆" id="markdown-toc-登陆">登陆</a></li>
+      <li><a href="#重启" id="markdown-toc-重启">重启</a></li>
+      <li><a href="#配置文件有变动" id="markdown-toc-配置文件有变动">配置文件有变动</a></li>
+      <li><a href="#删除harbor的容器" id="markdown-toc-删除harbor的容器">删除Harbor的容器</a>        <ul>
+          <li><a href="#不删除镜像和harbor的数据库文件" id="markdown-toc-不删除镜像和harbor的数据库文件">不删除镜像和Harbor的数据库文件</a></li>
+          <li><a href="#删除harbor的数据库和镜像数据用于干净的重新安装" id="markdown-toc-删除harbor的数据库和镜像数据用于干净的重新安装">删除Harbor的数据库和镜像数据（用于干净的重新安装）：</a></li>
+        </ul>
+      </li>
+      <li><a href="#docker节点添加harbor仓库为主仓库" id="markdown-toc-docker节点添加harbor仓库为主仓库">docker节点添加harbor仓库为主仓库</a>        <ul>
+          <li><a href="#修改etcdefaultdocker" id="markdown-toc-修改etcdefaultdocker">修改/etc/default/docker</a></li>
+          <li><a href="#修改daemonjson" id="markdown-toc-修改daemonjson">修改daemon.json</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>Project Harbor是一个企业级registry服务器，用于存储和分发Docker镜像。 Harbor通过添加企业通常需要的功能（如安全性，身份和管理）来扩展开源Docker Distribution。作为企业私人registry机构，Harbor提供更好的性能和安全性。使registry更接近构建和运行环境，提高了镜像传输效率。 Harbor支持多个registry的设置，并在它们之间复制镜像。此外，Harbor还提供高级安全功能，例如用户管理，访问控制和活动审计。</p>
+
+<p>GitHub: https://github.com/vmware/harbor</p>
+
+<h2 id="harbor-安装">Harbor 安装</h2>
+
+<p>环境  Ubuntu14.04</p>
+
+<h3 id="下载-harbor">下载 harbor</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ wget  https://github.com/vmware/harbor/releases/download/0.5.0/harbor-offline-installer-0.5.0.tgz
+$ tar xvf harbor-offline-installer-0.5.0.tgz
+$ vi harbor/harbor.cfg
+$ hostname = reg.mydomain.com   ##（reg.mydomain.com修改为自己的IP）其他默认即可
+</code></pre>
+</div>
+
+<h3 id="docker-compose">docker-compose</h3>
+
+<p>harbor需要docker-compose支持</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo curl -L "https://github.com/docker/compose/releases/download/1.11.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose   #下载docker-compose
+$ sudo chmod  +x /usr/local/bin/docker-compose  #添加docker-compose命令的执行权限
+$ docker-compose --version    #查看docker-compose版本
+ 
+然后执行$ sudo bash harbor/install.sh
+ 
+使用$ docker ps 看下，起六个容器
+CONTAINER ID        IMAGE                            COMMAND                  CREATED             STATUS              PORTS                                      NAMES
+2f4305b4cd0f        nginx:1.11.5                     "nginx -g 'daemon ..."   12 seconds ago      Up 11 seconds       0.0.0.0:80-&gt;80/tcp, 0.0.0.0:443-&gt;443/tcp   nginx
+f09c54d64dc9        vmware/harbor-jobservice:0.5.0   "/harbor/harbor_jo..."   12 seconds ago      Up 11 seconds                                                  harbor-jobservice
+8f86d0097f6c        vmware/harbor-ui:0.5.0           "/harbor/harbor_ui"      13 seconds ago      Up 12 seconds                                                  harbor-ui
+f7c143cca943        library/registry:2.5.0           "/entrypoint.sh se..."   13 seconds ago      Up 12 seconds       5000/tcp                                   registry
+614b3dfdfc76        vmware/harbor-db:0.5.0           "docker-entrypoint..."   13 seconds ago      Up 12 seconds       3306/tcp                                   harbor-db
+b0ec3a24f324        vmware/harbor-log:0.5.0          "/bin/sh -c 'crond..."   16 seconds ago      Up 13 seconds       0.0.0.0:1514-&gt;514/tcp                      harbor-log
+</code></pre>
+</div>
+
+<h3 id="查看效果">查看效果</h3>
+
+<p><img src="/images/harbor/harbor.png" alt="harbor" /></p>
+
+<h2 id="harbor使用">Harbor使用</h2>
+
+<h3 id="登陆">登陆</h3>
+
+<p>harbor 默认登陆账号/密码:admin/Harbor12345</p>
+
+<p>如果是在linux上登陆harbor</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker login $IP
+</code></pre>
+</div>
+
+<h3 id="重启">重启</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo docker-compose stop
+$ sudo docker-compose start
+</code></pre>
+</div>
+
+<h3 id="配置文件有变动">配置文件有变动</h3>
+
+<p>要更改Harbor的配置，首先停止现有的Harbor实例，更新harbor.cfg，然后再次运行install.sh：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo docker-compose down 
+$ vim harbor.cfg
+$ sudo install.sh
+</code></pre>
+</div>
+
+<h3 id="删除harbor的容器">删除Harbor的容器</h3>
+
+<h4 id="不删除镜像和harbor的数据库文件">不删除镜像和Harbor的数据库文件</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sudo docker-compose down
+</code></pre>
+</div>
+
+<h4 id="删除harbor的数据库和镜像数据用于干净的重新安装">删除Harbor的数据库和镜像数据（用于干净的重新安装）：</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ rm -r /data/database
+$ rm -r /data/registry
+</code></pre>
+</div>
+
+<h3 id="docker节点添加harbor仓库为主仓库">docker节点添加harbor仓库为主仓库</h3>
+
+<p>两种方式:</p>
+
+<h4 id="修改etcdefaultdocker">修改/etc/default/docker</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vim /etc/default/docker
+添加DOCKER_OPTS="--insecure-registry $IP"
+</code></pre>
+</div>
+
+<h4 id="修改daemonjson">修改daemon.json</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo  vi /etc/docker/daemon.json
+
+{
+"insecure-registries": ["$IP"]
+}
+</code></pre>
+</div>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                        
+                        <h2 id="similar_posts">Similar Posts</h2>
+                        <ul>
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/rancher-logs-es/">Rancher日志搜集
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/rancher-install/">Rancher 安装和使用
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/docker-container-update/">切换docker root dir
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/docker-command/">docker常用命令记录
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/automatic-deployment/">Rancher实现自动化部署
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+        
+            </ul>
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2017/06/29/docker-container-update/">切换docker root dir</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2017/06/29/rancher-install/">Rancher 安装和使用</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://localhost:4000/2017/06/29/harbor-install/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://localhost:4000/2017/06/29/harbor-install/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//dongbo.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+             本站记录我前端之旅的沿途风景！ 
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/db7689206@163.com" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:db7689206@163.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>        
+        </p>
+        <p>
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次，本站访客数<span id="busuanzi_value_site_uv"></span>人次，本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/">dongbo</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

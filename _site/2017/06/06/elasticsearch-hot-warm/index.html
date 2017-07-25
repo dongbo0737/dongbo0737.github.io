@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Elasticsearch 主节点和暖热节点</title>
+    <meta name="description" content="Elasticsearch 主节点和暖热节点解析">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://localhost:4000/2017/06/06/elasticsearch-hot-warm/">
+    <link rel="alternate" type="application/rss+xml" title="DongBo" href="http://localhost:4000/feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?cf8506e0ef223e57ff6239944e5d46a4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+    <script>
+    // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-72449510-4', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">DongBo</a>
+        <small>Front-end Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/demo/">
+                        
+                            <i class="fa fa-play"></i>Demo
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Elasticsearch 主节点和暖热节点</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-06-06
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#elasticsearch" title="Category: elasticsearch" rel="category">elasticsearch</a>&nbsp;
+    
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#elasticsearch" title="Tag: elasticsearch" rel="tag">elasticsearch</a-->
+        <a href="/tag/#elasticsearch" title="Tag: elasticsearch" rel="tag">elasticsearch</a>&nbsp;
+    
+        <!--a href="/tag/#java" title="Tag: java" rel="tag">java</a-->
+        <a href="/tag/#java" title="Tag: java" rel="tag">java</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#主节点" id="markdown-toc-主节点">主节点</a></li>
+  <li><a href="#data节点" id="markdown-toc-data节点">Data节点</a>    <ul>
+      <li><a href="#热节点" id="markdown-toc-热节点">热节点</a></li>
+      <li><a href="#暖节点" id="markdown-toc-暖节点">暖节点</a></li>
+      <li><a href="#api接口" id="markdown-toc-api接口">API接口</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>Elasticsearch 主节点和暖热节点解析</p>
+
+<h2 id="主节点">主节点</h2>
+
+<p>控制整个集群，进行一些轻量级操作，列如：跟踪哪些节点是集群中的一部分，决定节点分片分配，负责集群健康，
+不包含数据，也不参与搜索和索引操作，对于CPU,RAM，磁盘的性能要求比Data节点小很多</p>
+
+<h2 id="data节点">Data节点</h2>
+
+<h3 id="热节点">热节点</h3>
+
+<p>这个数据节点执行集群内的所有索引操作。他们也持有最近的指数，因为这些指数通常最常被查询。</p>
+
+<p>由于索引是CPU和IO密集型操作，因此这些服务器需要功能强大，并附带SSD存储。</p>
+
+<p>建议至少运行3个热节点以实现高可用性。根据收集的日志量，再确定需要多少机器</p>
+
+<p>通过elasticsearch.yml中配置：node.attr.box_type: hot</p>
+
+<p>也可以通过启动的时候命令：./bin/elasticsearch -Enode.attr.box_type=hot</p>
+
+<h3 id="暖节点">暖节点</h3>
+
+<p>这种类型的数据节点被设计为处理不太长用的索引数据，是只读索引。</p>
+
+<p>暖节点倾向于利用大型连接的磁盘（通常是旋转磁盘）而不是SSD。</p>
+
+<p>与热节点一样，我们建议至少有3个暖节点用于高可用性。与之前一样。</p>
+
+<p>要注意的是，大量的数据可能需要额外的节点来满足性能要求。</p>
+
+<p>还要注意，CPU和内存配置一般都是和热节点一样。具体配置需要根据生产环境实际情况来配置</p>
+
+<p>通过elasticsearch.yml中配置：node.attr.box_type: warm</p>
+
+<p>也可以通过启动的时候命令：./bin/elasticsearch -Enode.attr.box_type=warm</p>
+
+<p>可以在暖节点的elasticsearch.yml配置： index.codec: best_compression 来对分配到暖节点的数据进行压缩</p>
+
+<h3 id="api接口">API接口</h3>
+
+<p>ES会根据索引的setting来自动将数据分配到热节点或者暖节点</p>
+
+<p>分配logs_2016-12-26到热节点上</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>PUT /logs_2016-12-26/_settings
+{
+  "settings": {
+    "index.routing.allocation.require.box_type": "hot"
+  }
+}
+</code></pre>
+</div>
+
+<p>分配logs_2016-12-26到暖节点上</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>PUT /logs_2016-12-26/_settings
+{ 
+  "settings": { 
+    "index.routing.allocation.require.box_type": "warm"
+  } 
+}
+</code></pre>
+</div>
+
+<p>通过模板来分配索引数据该分配到热节点还是暖节点</p>
+
+<p>热节点：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"template"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"indexname-*"</span><span class="p">,</span><span class="err">#如果需要把所有的索引默认都指向热节点，可以配置为*</span><span class="w">
+  </span><span class="nt">"version"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">50001</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"settings"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+             </span><span class="nt">"index.routing.allocation.require.box_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hot"</span><span class="w">
+ </span><span class="err">...</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>暖节点：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"template"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"indexname-*"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"version"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">50001</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"settings"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+           </span><span class="nt">"index.routing.allocation.require.box_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"warm"</span><span class="w">
+ </span><span class="err">...</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                        
+                        <h2 id="similar_posts">Similar Posts</h2>
+                        <ul>
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/19/java-memory-analyzer/">Eclipse Memory Analyzer 堆转储文件分析
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+        
+            </ul>
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2017/06/06/elasticsearch-config/">Elasticsearch 配置文件</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2017/06/06/elasticsearch-install-5.2/">Elasticsearch 5.2.1安装</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://localhost:4000/2017/06/06/elasticsearch-hot-warm/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://localhost:4000/2017/06/06/elasticsearch-hot-warm/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//dongbo.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+             本站记录我前端之旅的沿途风景！ 
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/db7689206@163.com" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:db7689206@163.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>        
+        </p>
+        <p>
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次，本站访客数<span id="busuanzi_value_site_uv"></span>人次，本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/">dongbo</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

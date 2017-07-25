@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Windows10 下安装Jekyll</title>
+    <meta name="description" content="搭建1个博客。将自己碰到的问题，解决的办法与大家一起分享。">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://localhost:4000/2017/06/05/create-my-jekyll-blog/">
+    <link rel="alternate" type="application/rss+xml" title="DongBo" href="http://localhost:4000/feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?cf8506e0ef223e57ff6239944e5d46a4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+    <script>
+    // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-72449510-4', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">DongBo</a>
+        <small>Front-end Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/demo/">
+                        
+                            <i class="fa fa-play"></i>Demo
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Windows10 下安装Jekyll</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-06-05
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#jekyll" title="Category: jekyll" rel="category">jekyll</a>&nbsp;
+    
+        <a href="/category/#windows" title="Category: windows" rel="category">windows</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#jekyll" title="Tag: jekyll" rel="tag">jekyll</a-->
+        <a href="/tag/#jekyll" title="Tag: jekyll" rel="tag">jekyll</a>&nbsp;
+    
+        <!--a href="/tag/#windows" title="Tag: windows" rel="tag">windows</a-->
+        <a href="/tag/#windows" title="Tag: windows" rel="tag">windows</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#搭建过程" id="markdown-toc-搭建过程">搭建过程</a>    <ul>
+      <li><a href="#安装-ruby" id="markdown-toc-安装-ruby">安装 Ruby</a></li>
+      <li><a href="#安装jekyll" id="markdown-toc-安装jekyll">安装jekyll</a></li>
+    </ul>
+  </li>
+  <li><a href="#异常" id="markdown-toc-异常">异常</a></li>
+</ul>
+
+<p>搭建1个博客。将自己碰到的问题，解决的办法与大家一起分享。</p>
+
+<h2 id="搭建过程">搭建过程</h2>
+
+<p>主要安装：安装Ruby，安装RubyGems，安装jekyll</p>
+
+<h3 id="安装-ruby">安装 Ruby</h3>
+
+<p>1.安装rvm(rvm ruby的包管理工具)</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -L https://get.rvm.io | bash -s stable
+</code></pre>
+</div>
+
+<p>2.使rvm生效</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>source ~/.rvm/scripts/rvm
+</code></pre>
+</div>
+
+<p>3.修改rvm下载ruby的源</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>echo "ruby_url=https://cache.ruby-china.org/pub/ruby" &gt; ~/.rvm/user/db
+</code></pre>
+</div>
+
+<p>4.查询rvm是否安装成功</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>rvm -v
+</code></pre>
+</div>
+
+<p>5.安装RVM的环境依赖</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>rvm requirements
+</code></pre>
+</div>
+
+<p>6.安装ruby 下载2.3.0版本的ruby</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>rvm install 2.3.0
+</code></pre>
+</div>
+
+<p>7,切换ruby版本</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>rvm use 2.3.0 --default
+</code></pre>
+</div>
+
+<p>8.查询版本是否切换成功</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ruby -v
+</code></pre>
+</div>
+
+<p>9.查询gem版本</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>gem -v
+</code></pre>
+</div>
+
+<h3 id="安装jekyll">安装jekyll</h3>
+
+<p>1.安装jekyll</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>gem install jekyll
+</code></pre>
+</div>
+
+<p>2.查询jekyll版本</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>jekyll --version
+gem list jekyll
+</code></pre>
+</div>
+
+<p>3.查询gem中所有jekyll版本</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>gem search jekyll --remote
+</code></pre>
+</div>
+
+<p>4.安装指定版本jekyll</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>gem install jekyll -v '2.0.0.alpha.1'
+</code></pre>
+</div>
+
+<h2 id="异常">异常</h2>
+
+<p>1.启动异常</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>jekyll 3.4.3 | Error:  Invalid argument - Failed to watch "/mnt/c/Users/dongbo/Desktop/jekyll/dongbo.github.io/.git/branches": the given event mask contains no legal events; or fd is not an inotify file descriptor.
+</code></pre>
+</div>
+
+<p>解决:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>使用 jekyll server --force_polling启动
+</code></pre>
+</div>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2017/06/02/welcome-to-jekyll/">Hello Jekyll!</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2017/06/05/java-memory/">java虚拟机内存分配</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://localhost:4000/2017/06/05/create-my-jekyll-blog/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://localhost:4000/2017/06/05/create-my-jekyll-blog/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//dongbo.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+             本站记录我前端之旅的沿途风景！ 
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/db7689206@163.com" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:db7689206@163.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>        
+        </p>
+        <p>
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次，本站访客数<span id="busuanzi_value_site_uv"></span>人次，本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/">dongbo</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

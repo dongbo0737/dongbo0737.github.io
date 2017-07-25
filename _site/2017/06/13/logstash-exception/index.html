@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Logtash遇到的异常和注意点</title>
+    <meta name="description" content="logstash 遇到的一些异常解决">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://localhost:4000/2017/06/13/logstash-exception/">
+    <link rel="alternate" type="application/rss+xml" title="DongBo" href="http://localhost:4000/feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?cf8506e0ef223e57ff6239944e5d46a4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+    <script>
+    // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-72449510-4', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">DongBo</a>
+        <small>Front-end Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/demo/">
+                        
+                            <i class="fa fa-play"></i>Demo
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Logtash遇到的异常和注意点</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-06-13
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#logstash" title="Category: logstash" rel="category">logstash</a>&nbsp;
+    
+        <a href="/category/#exception" title="Category: exception" rel="category">exception</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#logstash" title="Tag: logstash" rel="tag">logstash</a-->
+        <a href="/tag/#logstash" title="Tag: logstash" rel="tag">logstash</a>&nbsp;
+    
+        <!--a href="/tag/#exception" title="Tag: exception" rel="tag">exception</a-->
+        <a href="/tag/#exception" title="Tag: exception" rel="tag">exception</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#1logstash使用kafka插件和es集成" id="markdown-toc-1logstash使用kafka插件和es集成">1：logstash使用kafka插件和es集成</a></li>
+  <li><a href="#2retrying-failed-action-with-response-code-429" id="markdown-toc-2retrying-failed-action-with-response-code-429">2：”retrying failed action with response code: 429</a></li>
+  <li><a href="#3logstash数据插入es中效率太慢" id="markdown-toc-3logstash数据插入es中效率太慢">3：logstash数据插入es中效率太慢</a></li>
+  <li><a href="#4使用ruby函数" id="markdown-toc-4使用ruby函数">4：使用ruby函数</a></li>
+  <li><a href="#5-auto-offset-commit-failed-for-group-clio-consr-biz-go1" id="markdown-toc-5-auto-offset-commit-failed-for-group-clio-consr-biz-go1">5: Auto offset commit failed for group clio-consr-biz-go1:</a></li>
+  <li><a href="#6一定要记得在使用的机器上修改hosts文件" id="markdown-toc-6一定要记得在使用的机器上修改hosts文件">6：一定要记得在使用的机器上修改hosts文件！</a></li>
+  <li><a href="#7filebeat数据进入logstash" id="markdown-toc-7filebeat数据进入logstash">7：filebeat数据进入logstash</a></li>
+</ul>
+
+<p>logstash 遇到的一些异常解决</p>
+
+<h2 id="1logstash使用kafka插件和es集成">1：logstash使用kafka插件和es集成</h2>
+
+<p>如果logstash使用kafka插件和es集成，必须设置kafka插件参数 
+session_timeout_ms =&gt; “10000”
+max_poll_records =&gt; “500”
+如果这2个值过高会导致es重复消费，而kafka中的offset偏移不会进行增加</p>
+
+<h2 id="2retrying-failed-action-with-response-code-429">2：”retrying failed action with response code: 429</h2>
+
+<p>Logstash提示这样的错误是因为bulk operations queue满了，要么调小flush_size的值，或者增大elasticsearch的thread
+增大Elasticsearch的bulk线程池队列
+配置文件中增加
+threadpool.bulk.queue_size: 1000</p>
+
+<h2 id="3logstash数据插入es中效率太慢">3：logstash数据插入es中效率太慢</h2>
+
+<p>增到配置文件中的batch-size和workers</p>
+
+<h2 id="4使用ruby函数">4：使用ruby函数</h2>
+
+<p>logstash5.0使用ruby设置值和取值
+例子：code =&gt; “event.set(‘server_time’ , Time.now())”设置当前server_time值为当时时间
+          code =&gt; “event.get(‘server_time’)” 获取server_time的值
+logstash5.0之前使用ruby
+ 列子：code =&gt; “event.[‘se ， rver_time’] = Time.now()”设置当前server_time值为当时时间
+          code =&gt; “event.[‘server_time’]”获取server_time的值</p>
+
+<h2 id="5-auto-offset-commit-failed-for-group-clio-consr-biz-go1">5: Auto offset commit failed for group clio-consr-biz-go1:</h2>
+
+<p>Commit cannot be completed since the group has already rebalanced and assigned the partitions to another member. 
+  This means that the time between subsequent calls to poll() was longer than the configured session.timeout.ms,
+   which typically implies that the poll loop is spending too much time message processing.
+ You can address this either by increasing the session timeout or by reducing the maximum size of batches returned in poll() with max.poll.records.</p>
+
+<p>提交消费组offset失败，无法完成重新分配partition。
+网上描述：该问题是因为logstash无法在限定时间内消费完所有的数据，超出了kafka端设定的session timeout，导致session挂掉，且之前消费过的数据offset未能返回给kafka。在kafka端会认为该数据没有正确消费，并进行重新partition。logstash端超时后会重新建立consumer进行数据拉取，而kafka端会因为offset的问题重新发送之前“消费失败”的数据。
+解决办法，增加session.timout.ms的值或者减少max.poll.records。
+注意session.timout.ms增大的同事也要增加request.timeout.ms参数，而已session.timeout.ms要小于request.timeout.ms</p>
+
+<h2 id="6一定要记得在使用的机器上修改hosts文件">6：一定要记得在使用的机器上修改hosts文件！</h2>
+
+<p>否则会造成无法连接kafka的情况。因为在某些情况下，连接是直接使用hostname进行的。</p>
+
+<h2 id="7filebeat数据进入logstash">7：filebeat数据进入logstash</h2>
+
+<p>所有filebeat定义的field都是string类型，而进入kafka再进去logstash，kafka会自动识别field转换类型</p>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <h2 id="similar_posts">Similar Posts</h2>
+                        <ul>
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/13/logstash-config/">Logtash 5.0 配置文件解析
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+        
+            </ul>
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2017/06/13/logstash-config/">Logtash 5.0 配置文件解析</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2017/06/19/java-memory-analyzer/">Eclipse Memory Analyzer 堆转储文件分析</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://localhost:4000/2017/06/13/logstash-exception/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://localhost:4000/2017/06/13/logstash-exception/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//dongbo.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+             本站记录我前端之旅的沿途风景！ 
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/db7689206@163.com" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:db7689206@163.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>        
+        </p>
+        <p>
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次，本站访客数<span id="busuanzi_value_site_uv"></span>人次，本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/">dongbo</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

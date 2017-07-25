@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Rancher实现自动化部署</title>
+    <meta name="description" content="使用docker rancher harbor jenkins 这些技术来实现自动化部署项目先将timer部署到rancher中">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://localhost:4000/2017/06/29/automatic-deployment/">
+    <link rel="alternate" type="application/rss+xml" title="DongBo" href="http://localhost:4000/feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?cf8506e0ef223e57ff6239944e5d46a4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+    <script>
+    // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-72449510-4', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">DongBo</a>
+        <small>Front-end Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/demo/">
+                        
+                            <i class="fa fa-play"></i>Demo
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Rancher实现自动化部署</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-06-29
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#docker" title="Category: docker" rel="category">docker</a>&nbsp;
+    
+        <a href="/category/#rancher" title="Category: rancher" rel="category">rancher</a>&nbsp;
+    
+        <a href="/category/#harbor" title="Category: harbor" rel="category">harbor</a>&nbsp;
+    
+        <a href="/category/#jenkins" title="Category: jenkins" rel="category">jenkins</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#docker" title="Tag: docker" rel="tag">docker</a-->
+        <a href="/tag/#docker" title="Tag: docker" rel="tag">docker</a>&nbsp;
+    
+        <!--a href="/tag/#rancher" title="Tag: rancher" rel="tag">rancher</a-->
+        <a href="/tag/#rancher" title="Tag: rancher" rel="tag">rancher</a>&nbsp;
+    
+        <!--a href="/tag/#harbor" title="Tag: harbor" rel="tag">harbor</a-->
+        <a href="/tag/#harbor" title="Tag: harbor" rel="tag">harbor</a>&nbsp;
+    
+        <!--a href="/tag/#jenkins" title="Tag: jenkins" rel="tag">jenkins</a-->
+        <a href="/tag/#jenkins" title="Tag: jenkins" rel="tag">jenkins</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#简介" id="markdown-toc-简介">简介</a></li>
+  <li><a href="#目标" id="markdown-toc-目标">目标</a></li>
+  <li><a href="#注意" id="markdown-toc-注意">注意</a></li>
+  <li><a href="#流程描述" id="markdown-toc-流程描述">流程描述</a></li>
+  <li><a href="#jenkins" id="markdown-toc-jenkins">Jenkins</a>    <ul>
+      <li><a href="#安装" id="markdown-toc-安装">安装</a></li>
+      <li><a href="#插件管理" id="markdown-toc-插件管理">插件管理</a></li>
+      <li><a href="#新增jenkins任务" id="markdown-toc-新增jenkins任务">新增Jenkins任务</a></li>
+      <li><a href="#执行jenkins任务" id="markdown-toc-执行jenkins任务">执行jenkins任务</a></li>
+    </ul>
+  </li>
+  <li><a href="#harbor" id="markdown-toc-harbor">Harbor</a>    <ul>
+      <li><a href="#安装-1" id="markdown-toc-安装-1">安装</a></li>
+      <li><a href="#镜像" id="markdown-toc-镜像">镜像</a></li>
+    </ul>
+  </li>
+  <li><a href="#rancher" id="markdown-toc-rancher">Rancher</a>    <ul>
+      <li><a href="#安装-2" id="markdown-toc-安装-2">安装</a></li>
+      <li><a href="#service" id="markdown-toc-service">service</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>使用docker rancher harbor jenkins 这些技术来实现自动化部署项目
+先将timer部署到rancher中</p>
+
+<h2 id="简介">简介</h2>
+
+<p>jenkins自动构建项目生成image,发布到harbor中</p>
+
+<p>harbor发布成功通过rancher cli在rancher中生成一个service</p>
+
+<p>官网</p>
+
+<p>jenkins：https://jenkins.io/doc/</p>
+
+<p>harbor：https://github.com/vmware/harbor</p>
+
+<p>docker:https://docs.docker.com/engine/</p>
+
+<p>rancher:http://docs.rancher.com/rancher/v1.6/en/</p>
+
+<h2 id="目标">目标</h2>
+
+<p>将TIMER项目部署至rancher环境</p>
+
+<h2 id="注意">注意</h2>
+
+<p>1.docker镜像需要小写</p>
+
+<p>2.rancher service name 命名规则[a-zA-Z0-9],符号支持-，其他基本都不支持</p>
+
+<p>3.rancher cli语句需要在一行，如果需要多行需要加 \  再换行</p>
+
+<p>4.需要在jenkins所在主机调用需要下载rancher cli加入环境变量</p>
+
+<p>进入rancher server，右下角下载</p>
+
+<p><img src="/images/autodeploy/rancher-client.png" alt="1" /></p>
+
+<p>5.Dockerfile定制：不可以有中文注释</p>
+
+<h2 id="流程描述">流程描述</h2>
+
+<p><img src="/images/autodeploy/process.png" alt="1" /></p>
+
+<h2 id="jenkins">Jenkins</h2>
+
+<h3 id="安装">安装</h3>
+
+<p>先到官网下载jenkins.war</p>
+
+<p>2种运行方式：</p>
+
+<p>1：jenkins.war放入tomcat webapps，启动tomcat
+2：java -jar jenkins.war</p>
+
+<h3 id="插件管理">插件管理</h3>
+
+<p>系统管理-插件管理-可选插件
+ssh plugin
+Maven Integration plugin
+Rebuilder</p>
+
+<p><img src="/images/autodeploy/jenkins-1.png" alt="jenkins-1" /></p>
+
+<p>配置jenkins工作目录</p>
+
+<p><img src="/images/autodeploy/jenkins-2.png" alt="jenkins-2" /></p>
+
+<p>配置Jenkins location</p>
+
+<p><img src="/images/autodeploy/jenkins-3.png" alt="jenkins-3" /></p>
+
+<p>Global Tool配置修改</p>
+
+<p><img src="/images/autodeploy/jenkins-4.png" alt="jenkins-4" /></p>
+
+<p>添加各个版本jdk</p>
+
+<p><img src="/images/autodeploy/jenkins-5.png" alt="jenkins-5" /></p>
+
+<p>添加各版本maven</p>
+
+<p><img src="/images/autodeploy/jenkins-6.png" alt="jenkins-6" /></p>
+
+<h3 id="新增jenkins任务">新增Jenkins任务</h3>
+
+<p>1.新增maven任务</p>
+
+<p><img src="/images/autodeploy/jenkins-7.png" alt="jenkins-7" /></p>
+
+<p><img src="/images/autodeploy/jenkins-8.png" alt="jenkins-8" /></p>
+
+<p>2.新增参数</p>
+
+<p><img src="/images/autodeploy/jenkins-9.png" alt="jenkins-9" /></p>
+
+<p>通过String Parameter添加的参数可以通过url调用参数来传过来，参数名就是名字</p>
+
+<p>3.选择JDK版本</p>
+
+<p><img src="/images/autodeploy/jenkins-10.png" alt="jenkins-10" /></p>
+
+<p>4.选择源码仓库，目前使用的svn</p>
+
+<p><img src="/images/autodeploy/jenkins-11.png" alt="jenkins-11" /></p>
+
+<p>5.选择maven版本，定义maven构建命令</p>
+
+<p><img src="/images/autodeploy/jenkins-12.png" alt="jenkins-12" /></p>
+
+<p>6.maven构建成功后执行命令</p>
+
+<p><img src="/images/autodeploy/jenkins-13.png" alt="jenkins-13" /></p>
+
+<p>test.sh内容：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="nv">SERVER</span><span class="o">=</span><span class="nv">$1</span>
+<span class="nv">MODULE</span><span class="o">=</span><span class="nv">$2</span>
+<span class="nv">APP</span><span class="o">=</span><span class="nv">$3</span>
+<span class="nv">VERSION</span><span class="o">=</span><span class="nv">$4</span>
+<span class="nv">ENV</span><span class="o">=</span><span class="nv">$5</span>
+<span class="c">#tomcat</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$SERVER</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"tomcat"</span> <span class="o">]</span>
+<span class="k">then</span>
+ echo <span class="s1">'tomcat'</span>
+<span class="k">elif</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$SERVER</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"jboss"</span> <span class="o">]</span>
+<span class="k">then</span>
+ echo <span class="s1">'jboss'</span>
+<span class="k">elif</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$SERVER</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"timer"</span> <span class="o">]</span>
+<span class="k">then</span>
+ echo <span class="s1">'timer'</span>
+   
+  if <span class="o">[</span> <span class="s2">"</span><span class="nv">$ENV</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"prd"</span> <span class="o">]</span>;
+   then
+      /bin/bash -x /data/script/jenkins/createTimerPrdDockerFile.sh <span class="nv">$MODULE</span> <span class="nv">$APP</span> <span class="nv">$VERSION</span>
+  else
+     /bin/bash -x /data/script/jenkins/createTimerDockerFile.sh <span class="nv">$MODULE</span> <span class="nv">$APP</span> <span class="nv">$VERSION</span>
+  fi
+<span class="k">elif</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$SERVER</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"jar"</span> <span class="o">]</span>
+<span class="k">then</span>
+ echo <span class="s1">'jar'</span>
+<span class="k">fi</span>
+</code></pre>
+</div>
+
+<p>createTimerDockerFile.sh:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="nv">SERVER</span><span class="o">=</span>timer
+<span class="nb">declare</span> -l <span class="nv">MODULE</span><span class="o">=</span><span class="nv">$1</span>
+<span class="nv">APP</span><span class="o">=</span><span class="nv">$2</span>
+<span class="nv">VERSION</span><span class="o">=</span><span class="nv">$3</span>
+<span class="c">#echo $MODULE $APP</span>
+<span class="c">#修改打出来了包名字为应用名</span>
+mkdir -p /tmp/jenkins/<span class="nv">$MODULE</span>-<span class="nv">$APP</span>-<span class="nv">$SERVER</span>
+mv /data/jenkins/workspace/timer/clio/logsearchtimer/target/<span class="k">*</span>.jar /tmp/jenkins/<span class="nv">$MODULE</span>-<span class="nv">$APP</span>-<span class="nv">$SERVER</span>/<span class="nv">$APP</span>.jar
+<span class="c">#替换Dockerfile中的MODEL-APP.war</span>
+cp /data/script/jenkins/timer/Dockerfile /tmp/jenkins/<span class="nv">$MODULE</span>-<span class="nv">$APP</span>-<span class="nv">$SERVER</span>/Dockerfile
+sed -i <span class="s2">"s/MODULE-APP.jar/</span><span class="nv">$APP</span><span class="s2">.jar/g"</span>  /tmp/jenkins/<span class="nv">$MODULE</span>-<span class="nv">$APP</span>-<span class="nv">$SERVER</span>/Dockerfile
+<span class="nb">declare</span> -l <span class="nv">APP</span><span class="o">=</span><span class="nv">$APP</span>
+<span class="c">#build image</span>
+docker build -t <span class="nv">$MODULE</span>-<span class="nv">$APP</span>-<span class="nv">$SERVER</span>:<span class="nv">$VERSION</span> /tmp/jenkins/<span class="nv">$MODULE</span>-<span class="nv">$APP</span>-<span class="nv">$SERVER</span>
+<span class="c">#tag</span>
+docker tag <span class="nv">$MODULE</span>-<span class="nv">$APP</span>-<span class="nv">$SERVER</span>:<span class="nv">$VERSION</span> 192.168.154.216:8080/timer/<span class="nv">$MODULE</span>-<span class="nv">$APP</span>:<span class="nv">$VERSION</span>
+<span class="c">#push image</span>
+docker push 192.168.154.216:8080/timer/<span class="nv">$MODULE</span>-<span class="nv">$APP</span>:<span class="nv">$VERSION</span>
+</code></pre>
+</div>
+
+<p>createTimerDockerFile.sh和createTimerPrdDockerFile.sh不同在于，harbor仓库地址不一样</p>
+
+<p>Dockerfile模板:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>FROM 192.168.154.216:8080/java/jdk1.8:111
+#update time zone
+RUN echo "Asia/Shanghai" &gt; /etc/timezone &amp;&amp; \
+    dpkg-reconfigure -f noninteractive tzdata
+RUN mkdir -p /data/logs/timer
+ 
+COPY MODULE-APP.jar /MODULE-APP.jar
+</code></pre>
+</div>
+
+<p>解析rancher cli命令：</p>
+
+<p><img src="/images/autodeploy/rancher-client.png" alt="rancher-client" /></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>rancher  --url http://192.168.112.126:8080/v2-beta \ #定义rancher部署的环境url
+--access-key DFCA9E38C06961CE11DF   --secret-key FhiA24kNZKyd7nP158vnFrDsUcdegtDPSeKkTppL \ #定义请求的账号key，是rancher中自动生成的
+run -name "TIMER/logsearchtimer-aggs" \ # 定义rancher stack和service名称
+--label io.rancher.project_service.name="TIMER/logsearchtimer-5" \ #定义service下的容器名称
+--label io.rancher.stack_service.name="TIMER/logsearchtimer-5" \ #定义stack下的容器名称 需要和io.rancher.project_service.name统一
+--label io.rancher.scheduler.affinity:host_label:service="timer"  \ #定义service运行的宿主机标签
+--label io.rancher.container.start_once=true \#只启动一次。默认如果容器停止会一直重启，但是定时不需要。会有自己的重启机制
+--label cron.schedule="$RULE" \ #定时规则
+-v /data/logs/timer:/data/logs/timer \ #挂载目录
+ 192.168.154.216:8080/timer/${MODULE}-${APP}:${REVISION} java -jar ${APP}.jar ${PARAM} #从指定harbor上拉去镜像，容器启动后立即执行 java -jar命令
+</code></pre>
+</div>
+
+<h3 id="执行jenkins任务">执行jenkins任务</h3>
+
+<p>点击 Build with Parameters 填写参数，开始构建</p>
+
+<p><img src="/images/autodeploy/jenkins-14.png" alt="jenkins-14" /></p>
+
+<p>点击 Rebuild Last，可查看上一次任务执行的参数，并重新构建</p>
+
+<p><img src="/images/autodeploy/jenkins-15.png" alt="jenkins-15" /></p>
+
+<p>通过  配置 选项可以修改我们的 jenkins任务</p>
+
+<p><img src="/images/autodeploy/jenkins-16.png" alt="jenkins-16" /></p>
+
+<p>通过  工作空间 可以查看我们从svn上拉去的代码</p>
+
+<p><img src="/images/autodeploy/jenkins-17.png" alt="jenkins-17" /></p>
+
+<h2 id="harbor">Harbor</h2>
+
+<h3 id="安装-1">安装</h3>
+<p>具体安装参考:</p>
+
+<p><a href="/2017/06/29/harbor-install/">Harbor 安装和使用</a></p>
+
+<p>github：https://github.com/vmware/harbor</p>
+
+<h3 id="镜像">镜像</h3>
+
+<p>jenkins构建完成，上传的镜像</p>
+
+<p><img src="/images/autodeploy/harbor-image.png" alt="harbor-image" /></p>
+
+<h2 id="rancher">Rancher</h2>
+
+<h3 id="安装-2">安装</h3>
+
+<p>参考: <a href="/2017/06/29/rancher-install/">Rancher 安装和使用</a></p>
+
+<p>官网：http://docs.rancher.com/rancher/v1.6/en/</p>
+
+<h3 id="service">service</h3>
+
+<p>通过rancher cli生成的docker容器已经正常运行</p>
+
+<p><img src="/images/autodeploy/rancher-service-1.png" alt="rancher-service-1" /></p>
+
+<p>详情：</p>
+
+<p><img src="/images/autodeploy/rancher-service-2.png" alt="rancher-service-2" /></p>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                        
+                        <h2 id="similar_posts">Similar Posts</h2>
+                        <ul>
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/rancher-logs-es/">Rancher日志搜集
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/rancher-install/">Rancher 安装和使用
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/harbor-install/">Harbor 安装和使用
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/docker-container-update/">切换docker root dir
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/docker-command/">docker常用命令记录
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+        
+            </ul>
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2017/06/19/java-memory-analyzer/">Eclipse Memory Analyzer 堆转储文件分析</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2017/06/29/docker-command/">docker常用命令记录</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://localhost:4000/2017/06/29/automatic-deployment/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://localhost:4000/2017/06/29/automatic-deployment/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//dongbo.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+             本站记录我前端之旅的沿途风景！ 
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/db7689206@163.com" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:db7689206@163.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>        
+        </p>
+        <p>
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次，本站访客数<span id="busuanzi_value_site_uv"></span>人次，本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/">dongbo</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

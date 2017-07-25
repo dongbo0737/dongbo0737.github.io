@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Logtash 5.0 配置文件解析</title>
+    <meta name="description" content="logstash 一个ELK架构中，专门用来进行接受数据进行处理，可以和很好的扩展节点官网：https://www.elastic.co/guide/en/logstash/5.2/index.htmllogstash安装很简单，推荐使用tar包下载，解压">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://localhost:4000/2017/06/13/logstash-config/">
+    <link rel="alternate" type="application/rss+xml" title="DongBo" href="http://localhost:4000/feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?cf8506e0ef223e57ff6239944e5d46a4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+    <script>
+    // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-72449510-4', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">DongBo</a>
+        <small>Front-end Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/demo/">
+                        
+                            <i class="fa fa-play"></i>Demo
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Logtash 5.0 配置文件解析</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-06-13
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#logstash" title="Category: logstash" rel="category">logstash</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#logstash" title="Tag: logstash" rel="tag">logstash</a-->
+        <a href="/tag/#logstash" title="Tag: logstash" rel="tag">logstash</a>&nbsp;
+    
+        <!--a href="/tag/#config" title="Tag: config" rel="tag">config</a-->
+        <a href="/tag/#config" title="Tag: config" rel="tag">config</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#logstashyml" id="markdown-toc-logstashyml">logstash.yml</a></li>
+  <li><a href="#startupoptions" id="markdown-toc-startupoptions">startup.options</a></li>
+  <li><a href="#集成的插件配置数据处理" id="markdown-toc-集成的插件配置数据处理">集成的插件配置，数据处理</a>    <ul>
+      <li><a href="#100-inputconf" id="markdown-toc-100-inputconf">100-input.conf</a></li>
+      <li><a href="#200-initialize-filterconf" id="markdown-toc-200-initialize-filterconf">200-initialize-filter.conf</a></li>
+      <li><a href="#210-webaccess-filterconf" id="markdown-toc-210-webaccess-filterconf">210-webaccess-filter.conf</a></li>
+      <li><a href="#211-audit-filterconf" id="markdown-toc-211-audit-filterconf">211-audit-filter.conf</a></li>
+      <li><a href="#299-common-filterconf" id="markdown-toc-299-common-filterconf">299-common-filter.conf</a></li>
+      <li><a href="#300-elasticsearch-outputconf" id="markdown-toc-300-elasticsearch-outputconf">300-elasticsearch-output.conf</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>logstash 一个ELK架构中，专门用来进行接受数据进行处理，可以和很好的扩展节点</p>
+
+<p>官网：https://www.elastic.co/guide/en/logstash/5.2/index.html</p>
+
+<p>logstash安装很简单，推荐使用tar包下载，解压</p>
+
+<h2 id="logstashyml">logstash.yml</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>//配置文件，以英文为准
+# Settings file in YAML
+#
+# Settings can be specified either in hierarchical form, e.g.:
+#
+#   pipeline:
+#     batch:
+#       size: 125
+#       delay: 5
+#
+# Or as flat keys:
+#
+#   pipeline.batch.size: 125
+#   pipeline.batch.delay: 5
+#
+# ------------  Node identity ------------
+#
+# Use a descriptive name for the node:
+#
+//节点名称
+ node.name: dev211133
+#
+# If omitted the node name will default to the machine's host name
+#
+# ------------ Data path ------------------
+#
+# Which directory should be used by logstash and its plugins
+# for any persistent needs. Defaults to LOGSTASH_HOME/data
+#
+//数据存储路径
+ path.data: /data/logstash/data
+#
+# ------------ Pipeline Settings --------------
+#
+# Set the number of workers that will, in parallel, execute the filters+outputs
+# stage of the pipeline.
+#
+# This defaults to the number of the host's CPU cores.
+#
+//输出通道的工作workers数据量（提升输出效率）
+ pipeline.workers: 8
+#
+# How many workers should be used per output plugin instance
+#
+//每个输出插件的工作wokers数量
+# pipeline.output.workers: 1
+#
+# How many events to retrieve from inputs before sending to filters+workers
+#
+//每次input数量
+ pipeline.batch.size: 4000
+#
+# How long to wait before dispatching an undersized batch to filters+workers
+# Value is in milliseconds.
+#
+# pipeline.batch.delay: 5
+#
+# Force Logstash to exit during shutdown even if there are still inflight
+# events in memory. By default, logstash will refuse to quit until all
+# received events have been pushed to the outputs.
+#
+# WARNING: enabling this can lead to data loss during shutdown
+#
+# pipeline.unsafe_shutdown: false
+#
+# ------------ Pipeline Configuration Settings --------------
+#
+# Where to fetch the pipeline configuration for the main pipeline
+#
+//过滤配置文件目录
+ path.config: /opt/logstash/config/conf.d
+#
+# Pipeline configuration string for the main pipeline
+#
+# config.string:
+#
+# At startup, test if the configuration is valid and exit (dry run)
+#
+# config.test_and_exit: false
+#
+# Periodically check if the configuration has changed and reload the pipeline
+# This can also be triggered manually through the SIGHUP signal
+#
+//自动从新加载被修改配置
+# config.reload.automatic: false
+#
+# How often to check if the pipeline configuration has changed (in seconds)
+#
+//配置文件检查时间
+# config.reload.interval: 3
+#
+# Show fully compiled configuration as debug log message
+# NOTE: --log.level must be 'debug'
+#
+//开始debug日志
+# config.debug: false
+#
+# ------------ Metrics Settings --------------
+#
+# Bind address for the metrics REST endpoint
+#
+//绑定主机地址，用户指标收集
+ http.host: "192.168.211.133"
+#
+# Bind port for the metrics REST endpoint, this option also accept a range
+# (9600-9700) and logstash will pick up the first available ports.
+#
+//绑定端口
+ http.port: 5000-9700
+#
+# ------------ Debugging Settings --------------
+#
+# Options for log.level:
+#   * fatal
+#   * error
+#   * warn
+#   * info (default)
+#   * debug
+#   * trace
+#
+//日志输出级别和路径，如果config.debug开启，这里一定要是debug日志
+ log.level: info
+ path.logs: /data/logstash/logs
+#
+# ------------ Other Settings --------------
+#
+# Where to find custom plugins
+//自定义插件
+# path.plugins: []
+</code></pre>
+</div>
+
+<h2 id="startupoptions">startup.options</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>################################################################################启动配置，以英文为准
+# These settings are ONLY used by $LS_HOME/bin/system-install to create a custom
+# startup script for Logstash.  It should automagically use the init system
+# (systemd, upstart, sysv, etc.) that your Linux distribution uses.
+#
+# After changing anything here, you need to re-run $LS_HOME/bin/system-install
+# as root to push the changes to the init script.
+################################################################################
+
+# Override Java location
+#本地jdk
+JAVACMD=/usr/bin/java
+
+# Set a home directory
+#logstash所在目录
+LS_HOME=/opt/logstash
+
+# logstash settings directory, the path which contains logstash.yml
+#默认logstash配置文件目录
+LS_SETTINGS_DIR="${LS_HOME}/config"
+
+# Arguments to pass to logstash
+#logstash启动命令参数 指定配置文件目录
+LS_OPTS="--path.settings ${LS_SETTINGS_DIR}"
+
+# Arguments to pass to java
+#指定jdk目录
+#LS_JAVA_OPTS=""
+
+# pidfiles aren't used the same way for upstart and systemd; this is for sysv users.
+#logstash.pid所在目录
+LS_PIDFILE=/var/run/logstash.pid
+
+# user and group id to be invoked as
+#logstash启动组和用户
+LS_USER=logstash
+LS_GROUP=logstash
+
+# Enable GC logging by uncommenting the appropriate lines in the GC logging
+# section in jvm.options
+#logstash jvm gc日志路径
+LS_GC_LOG_FILE=/var/log/logstash/gc.log
+
+# Open file limit
+#logstash最多打开监控文件数量
+LS_OPEN_FILES=65534
+
+# Nice level
+LS_NICE=19
+
+# Change these to have the init script named and described differently
+# This is useful when running multiple instances of Logstash on the same
+# physical box or vm
+#初始化脚本和描述名称
+SERVICE_NAME="logstash"
+SERVICE_DESCRIPTION="logstash"
+
+# If you need to run a command or script before launching Logstash, put it
+# between the lines beginning with `read` and `EOM`, and uncomment those lines.
+###
+## read -r -d '' PRESTART &lt;&lt; EOM
+## EOM
+</code></pre>
+</div>
+
+<h2 id="集成的插件配置数据处理">集成的插件配置，数据处理</h2>
+
+<p>logstash加载配置是循序加载</p>
+
+<h3 id="100-inputconf">100-input.conf</h3>
+
+<p>输入插件</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>input {
+    kafka {
+        bootstrap_servers =&gt; "172.25.156.113:9092,172.25.156.114:9092,172.25.156.115:9092"
+        group_id =&gt; "clio-consr-weba-go1"#consumergroup
+        topics =&gt; ["ule-webaccess"]#topic
+        session_timeout_ms =&gt; "60000"#session超时
+        request_timeout_ms =&gt; "180000"#request超时
+        max_poll_records =&gt; "500"
+        check_crcs =&gt; "true"
+        codec =&gt; "json"
+        decorate_events =&gt; true#输出kafka信息
+        consumer_threads =&gt; 3#消费的线程，根据threads*workers*服务器数量=partition
+        add_field =&gt; {
+         "processor_host" =&gt; "172.25.156.74"
+        }
+    }
+}
+</code></pre>
+</div>
+
+<h3 id="200-initialize-filterconf">200-initialize-filter.conf</h3>
+
+<p>初始化配置</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>filter {
+    mutate {
+        add_tag =&gt; [ "invalid" ] #添加invaild标签
+        add_field =&gt; [ "receive" , "%{[@timestamp]}" ]#将filebeat带过来的timestamp赋值给receive
+    }
+    ruby {
+        init =&gt; "require 'time'"
+        code =&gt; "event.set('processor_timestamp' , Time.now());event.set('lag' , Time.now().to_i-event.get('@timestamp').to_i)"#ruby计算时间差，进入logstash时间- filebeat抓取日志时间
+    }
+#进行kafka.topic判断，如果是app是audit,topic赋值为ule-audit，、
+#后面输入到es会根据topic 生成索引
+    if [kafka][topic] == "ule-business" {
+        if [app] == "audit" {
+            mutate {
+                update =&gt; { "[kafka][topic]" =&gt; "ule-audit" }
+            }
+        }  else {
+            mutate { 
+                remove_tag =&gt; [ "invalid" ]#删除invalid标签
+            }
+        }
+    }
+  
+   #
+    if [kafka][topic] == "system-logstash" {
+       mutate {
+          remove_tag =&gt; [ "invalid" ]
+        }
+    }
+}
+</code></pre>
+</div>
+
+<h3 id="210-webaccess-filterconf">210-webaccess-filter.conf</h3>
+
+<p>apache日志接受处理</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>#apache日志过滤
+filter {
+    if [kafka][topic] == "ule-webaccess" {
+        grok {
+#根据apache日志格式解析
+            match =&gt; { "message" =&gt; "\"%{DATA:xforward}\" %{COMBINEDAPACHELOG} (?:%{NUMBER:duration:float}) (?:%{DATA:domain}) \"(?:%{DATA:protocol}|)\" \"(?:%{DATA:rawurlpath})\" \"(?:%{DATA:rawurlquery}|)\" (?:%{DATA:method}) (?:%{NUMBER:ibytes:int}) (?:%{NUMBER:obytes:int}) \"(?:%{DATA:uleck}|)\"" }
+        }
+        date { 
+#格式化时间戳
+            match =&gt; [ "timestamp" , "dd/MMM/yyyy:HH:mm:ss Z" ]
+        }
+        mutate { 
+#删除timestamp字段和invalid标签
+            remove_field =&gt; [ "timestamp" ]
+            remove_tag =&gt; [ "invalid" ] 
+        }
+    }
+
+}
+</code></pre>
+</div>
+
+<h3 id="211-audit-filterconf">211-audit-filter.conf</h3>
+
+<p>审计日志处理</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>filter {
+    if [kafka][topic] == "ule-audit" {
+        grok {
+#格式化日志信息
+            match =&gt; { "message" =&gt; "%{TIMESTAMP_ISO8601:timestamp}" }
+        }
+        date { 
+#格式化时间戳
+            match =&gt; [ "timestamp" , "yyyy-MM-dd HH:mm:ss,SSS" , "ISO8601" ] 
+        }
+        mutate { 
+#删除invalid标签
+            remove_tag =&gt; [ "invalid" ] 
+        }
+    }
+}
+</code></pre>
+</div>
+
+<h3 id="299-common-filterconf">299-common-filter.conf</h3>
+
+<p>数据处理完成后的通用过滤</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>filter {
+#判断浏览器agent,进行解析
+    if [agent] and [agent] != "-" and [agent] != "" {
+        useragent {
+            source =&gt; "agent"
+            prefix =&gt; "UA-"
+        }
+    }
+#如果有timestamp字段，则删除
+    if [timestamp] {
+        mutate {
+            remove_field =&gt; ["timestamp"]
+        }
+    }
+}	
+</code></pre>
+</div>
+
+<h3 id="300-elasticsearch-outputconf">300-elasticsearch-output.conf</h3>
+
+<p>输出插件，一般都是输出到es中，当然也可以输出到redis，kafka中，具体官网上查询</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>output {
+#如果标签为invalid，不进行输出到es
+  if "invalid" not in [tags]  {
+#如果topic是system-logstash生成是索引是按月来的
+      if [kafka][topic] == "system-logstash" {
+        elasticsearch {
+           hosts =&gt; ["172.25.156.62:9202","172.25.156.66:9202"]#es服务器
+           index =&gt; "%{[kafka][topic]}-%{+YYYY.MM}"#指定索引格式
+           document_type =&gt; "%{[type]}"#文档类型
+           flush_size =&gt; 5000#缓存数量
+          }
+      } else {
+#生成索引按天来
+         elasticsearch {
+           hosts =&gt; ["172.25.156.62:9202","172.25.156.66:9202"]
+           index =&gt; "%{[kafka][topic]}-%{+YYYY.MM.dd}"
+           document_type =&gt; "%{[type]}"
+           flush_size =&gt; 5000
+          }
+      }
+    }
+}
+</code></pre>
+</div>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <h2 id="similar_posts">Similar Posts</h2>
+                        <ul>
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/13/logstash-exception/">Logtash遇到的异常和注意点
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/13/filebeat-config/">filebeat.yml
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+        
+            </ul>
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2017/06/13/filebeat-config/">filebeat.yml</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2017/06/13/logstash-exception/">Logtash遇到的异常和注意点</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://localhost:4000/2017/06/13/logstash-config/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://localhost:4000/2017/06/13/logstash-config/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//dongbo.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+             本站记录我前端之旅的沿途风景！ 
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/db7689206@163.com" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:db7689206@163.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>        
+        </p>
+        <p>
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次，本站访客数<span id="busuanzi_value_site_uv"></span>人次，本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/">dongbo</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

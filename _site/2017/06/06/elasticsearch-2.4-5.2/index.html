@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Elasticsearch 2.4 升级 5.2 注意事项及问题汇总</title>
+    <meta name="description" content="Elasticsearch 2.4 升级 5.2此文档只适合elasticsearch2.x升级到5.x如果想要1.x升级到5.x请查看官网升级之前需要先备份重要数据，防止数据丢失">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://localhost:4000/2017/06/06/elasticsearch-2.4-5.2/">
+    <link rel="alternate" type="application/rss+xml" title="DongBo" href="http://localhost:4000/feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?cf8506e0ef223e57ff6239944e5d46a4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+    <script>
+    // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-72449510-4', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">DongBo</a>
+        <small>Front-end Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/demo/">
+                        
+                            <i class="fa fa-play"></i>Demo
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Elasticsearch 2.4 升级 5.2 注意事项及问题汇总</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-06-06
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#elasticsearch" title="Category: elasticsearch" rel="category">elasticsearch</a>&nbsp;
+    
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#elasticsearch" title="Tag: elasticsearch" rel="tag">elasticsearch</a-->
+        <a href="/tag/#elasticsearch" title="Tag: elasticsearch" rel="tag">elasticsearch</a>&nbsp;
+    
+        <!--a href="/tag/#java" title="Tag: java" rel="tag">java</a-->
+        <a href="/tag/#java" title="Tag: java" rel="tag">java</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#检查安装-migration-helper" id="markdown-toc-检查安装-migration-helper">检查：安装 Migration Helper</a>    <ul>
+      <li><a href="#1安装" id="markdown-toc-1安装">1.安装</a></li>
+      <li><a href="#2登陆检查页面根据页面按钮操作" id="markdown-toc-2登陆检查页面根据页面按钮操作">2.登陆检查页面，根据页面按钮操作</a></li>
+      <li><a href="#3如果需要检查远程集群中的节点需要在elasticsearchyml文件增加" id="markdown-toc-3如果需要检查远程集群中的节点需要在elasticsearchyml文件增加">3.如果需要检查远程集群中的节点，需要在elasticsearch.yml文件增加</a></li>
+      <li><a href="#4如果你的es集群有权限控制" id="markdown-toc-4如果你的es集群有权限控制">4.如果你的es集群有权限控制</a></li>
+    </ul>
+  </li>
+  <li><a href="#升级elasticsearch" id="markdown-toc-升级elasticsearch">升级Elasticsearch</a>    <ul>
+      <li><a href="#1停止自动分片" id="markdown-toc-1停止自动分片">1.停止自动分片</a></li>
+      <li><a href="#2同步刷新" id="markdown-toc-2同步刷新">2.同步刷新</a></li>
+      <li><a href="#3停止es服务升级所有节点" id="markdown-toc-3停止es服务升级所有节点">3.停止es服务，升级所有节点</a></li>
+      <li><a href="#4查询节点是否正常启动并且加入集群中" id="markdown-toc-4查询节点是否正常启动并且加入集群中">4.查询节点是否正常启动，并且加入集群中</a></li>
+      <li><a href="#5开启自动分片" id="markdown-toc-5开启自动分片">5.开启自动分片</a></li>
+      <li><a href="#6等待集群恢复查询集群状态" id="markdown-toc-6等待集群恢复查询集群状态">6.等待集群恢复，查询集群状态</a></li>
+      <li><a href="#7查询分片恢复情况" id="markdown-toc-7查询分片恢复情况">7.查询分片恢复情况</a></li>
+    </ul>
+  </li>
+  <li><a href="#问题修复" id="markdown-toc-问题修复">问题修复</a>    <ul>
+      <li><a href="#1-max_map_count-参数太小" id="markdown-toc-1-max_map_count-参数太小">1 max_map_count 参数太小</a></li>
+      <li><a href="#2当前用户的最大线程数量太小" id="markdown-toc-2当前用户的最大线程数量太小">2.当前用户的最大线程数量太小</a></li>
+      <li><a href="#3-bootstrap-checks-failed" id="markdown-toc-3-bootstrap-checks-failed">3 bootstrap checks failed</a></li>
+      <li><a href="#4es-24升级es-52ik分词器升级后分词不能兼容出现异常" id="markdown-toc-4es-24升级es-52ik分词器升级后分词不能兼容出现异常">4.ES 2.4升级ES 5.2，IK分词器升级后，分词不能兼容，出现异常</a></li>
+      <li><a href="#5---2x客户端连接5x-es出现异常" id="markdown-toc-5---2x客户端连接5x-es出现异常">5.   2.x客户端连接5.x ES出现异常</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>Elasticsearch 2.4 升级 5.2</p>
+
+<p>此文档只适合elasticsearch2.x升级到5.x</p>
+
+<p>如果想要1.x升级到5.x请查看官网</p>
+
+<p>升级之前需要先备份重要数据，防止数据丢失</p>
+
+<h2 id="检查安装-migration-helper">检查：安装 Migration Helper</h2>
+
+<p>这个工具有3个功能</p>
+
+<p>1).Cluster Checkup</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Runs a series of checks on your cluster, nodes, and indices and alerts you to any known problems that need to be rectified before upgrading.
+</code></pre>
+</div>
+
+<p>2).Reindex Helper</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Indices created before v2.0.0 need to be reindexed before they can be used in Elasticsearch 5.x. The reindex helper upgrades old indices at the click of a button.
+</code></pre>
+</div>
+
+<p>3).Deprecation Logging</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> Elasticsearch comes with a deprecation logger which will log a message whenever deprecated functionality is used. This tool enables or disables deprecation logging on your cluster.
+</code></pre>
+</div>
+
+<h3 id="1安装">1.安装</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>./bin/plugin install https://github.com/elastic/elasticsearch-migration/releases/download/v2.0.4/elasticsearch-migration-2.0.4.zip
+</code></pre>
+</div>
+
+<h3 id="2登陆检查页面根据页面按钮操作">2.登陆检查页面，根据页面按钮操作</h3>
+
+<p>http://ip:9200/_plugin/elasticsearch-migration</p>
+
+<h3 id="3如果需要检查远程集群中的节点需要在elasticsearchyml文件增加">3.如果需要检查远程集群中的节点，需要在elasticsearch.yml文件增加</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http.cors.enabled: true
+http.cors.allow-origin: # the hostname or a regex which matches the hostname
+</code></pre>
+</div>
+
+<h3 id="4如果你的es集群有权限控制">4.如果你的es集群有权限控制</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http.cors.allow-credentials: true
+</code></pre>
+</div>
+
+<h2 id="升级elasticsearch">升级Elasticsearch</h2>
+
+<h3 id="1停止自动分片">1.停止自动分片</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -XPUT 'http://ip:9200/_cluster/settings?pretty' -H 'Content-Type: application/json' -d'
+{
+  "persistent": {
+    "cluster.routing.allocation.enable": "none"
+  }
+}'
+</code></pre>
+</div>
+
+<h3 id="2同步刷新">2.同步刷新</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -XPOST 'http://192.168.211.130:9200/_flush/synced?pretty'
+</code></pre>
+</div>
+
+<h3 id="3停止es服务升级所有节点">3.停止es服务，升级所有节点</h3>
+
+<p>登陆官网查询不同的升级方式（Debian or RPM or zip or tar）
+https://www.elastic.co/guide/en/elasticsearch/reference/5.2/rolling-upgrades.html#upgrade-node</p>
+
+<p>如果是tar包升级，下载当前5.2版本的tar包进行解压</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.1.tar.gz
+sha1sum elasticsearch-5.2.1.tar.gz 
+tar -xzf elasticsearch-5.2.1.tar.gz
+cd elasticsearch-5.2.1/ 
+</code></pre>
+</div>
+
+<p>将Migration Helper校验过的2.4的yml配置文件进行覆盖</p>
+
+<h3 id="4查询节点是否正常启动并且加入集群中">4.查询节点是否正常启动，并且加入集群中</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -XGET 'http://ip:9200/_cat/nodes?pretty'
+</code></pre>
+</div>
+
+<h3 id="5开启自动分片">5.开启自动分片</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -XPUT 'http://ip:9200/_cluster/settings?pretty' -H 'Content-Type: application/json' -d'
+{
+  "transient": {
+    "cluster.routing.allocation.enable": "all"
+  }
+}'
+</code></pre>
+</div>
+
+<h3 id="6等待集群恢复查询集群状态">6.等待集群恢复，查询集群状态</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -XGET 'http://ip:9200/_cat/health?pretty'
+</code></pre>
+</div>
+
+<h3 id="7查询分片恢复情况">7.查询分片恢复情况</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -XGET 'http://ip:9200/_cat/recovery?pretty'
+</code></pre>
+</div>
+
+<h2 id="问题修复">问题修复</h2>
+
+<h3 id="1-max_map_count-参数太小">1 max_map_count 参数太小</h3>
+
+<p>报错信息</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ERROR:max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+</code></pre>
+</div>
+
+<p>解决</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo su
+sysctl -w vm.max_map_count=262144
+</code></pre>
+</div>
+
+<h3 id="2当前用户的最大线程数量太小">2.当前用户的最大线程数量太小</h3>
+
+<p>报错信息</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>max number of threads [1024] for user [elasticsearch] is too low, increase to at least [2048]
+</code></pre>
+</div>
+
+<p>解决</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi /etc/security/limits.conf
+*               soft     nofile          65536
+*               hard     nofile         65536
+*               soft     nproc          2048
+*               hard     nproc         4096
+sudo vim /etc/pam.d/su
+session required pam_limits.so#注释放开，使limits.conf生效
+</code></pre>
+</div>
+
+<h3 id="3-bootstrap-checks-failed">3 bootstrap checks failed</h3>
+
+<p>报错信息</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ERROR: bootstrap checks failed  memory locking requested for elasticsearch process but memory is not locked
+</code></pre>
+</div>
+
+<p>解决</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>vi /etc/security/limits.conf
+ * soft memlock unlimited
+ * hard memlock unlimited
+ sudo vim /etc/pam.d/su
+ session required pam_limits.so#注释放开，使limits.conf生效
+</code></pre>
+</div>
+
+<h3 id="4es-24升级es-52ik分词器升级后分词不能兼容出现异常">4.ES 2.4升级ES 5.2，IK分词器升级后，分词不能兼容，出现异常</h3>
+
+<p>报错信息</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Caused by: java.lang.IllegalArgumentException: Unknown tokenizer type [ik] for [my_tokenizer]
+ at org.elasticsearch.index.analysis.AnalysisRegistry.getAnalysisProvider(AnalysisRegistry.java:387) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.analysis.AnalysisRegistry.buildMapping(AnalysisRegistry.java:338) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.analysis.AnalysisRegistry.buildTokenizerFactories(AnalysisRegistry.java:176) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.analysis.AnalysisRegistry.build(AnalysisRegistry.java:154) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.IndexService.(IndexService.java:146) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.IndexModule.newIndexService(IndexModule.java:363) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.indices.IndicesService.createIndexService(IndicesService.java:425) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.indices.IndicesService.verifyIndexMetadata(IndicesService.java:458) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.cluster.metadata.MetaDataIndexStateService$2.execute(MetaDataIndexStateService.java:173) ~[elasticsearch-5.2.1.jar:5.2.1]
+   [2017-02-28T10:04:11,039][WARN ][o.e.g.Gateway ] [dev211130] recovering index [ule-webaccess-2017.02.28/9vjPkRjdTzmwCrTtenJlaA] failed - recovering as closed
+ org.elasticsearch.index.mapper.MapperParsingException: Failed to parse mapping [logs]: analyzer [ik] not found for field [message]
+ at org.elasticsearch.index.mapper.MapperService.internalMerge(MapperService.java:323) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.mapper.MapperService.internalMerge(MapperService.java:277) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.mapper.MapperService.merge(MapperService.java:256) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.indices.IndicesService.verifyIndexMetadata(IndicesService.java:461) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.gateway.Gateway.performStateRecovery(Gateway.java:135) [elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.gateway.GatewayService$1.doRun(GatewayService.java:229) [elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.common.util.concurrent.ThreadContext$ContextPreservingAbstractRunnable.doRun(ThreadContext.java:596) [elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.common.util.concurrent.AbstractRunnable.run(AbstractRunnable.java:37) [elasticsearch-5.2.1.jar:5.2.1]
+ at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) [?:1.8.0_101]
+ at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) [?:1.8.0_101]
+ at java.lang.Thread.run(Thread.java:745) [?:1.8.0_101]
+ Caused by: org.elasticsearch.index.mapper.MapperParsingException: analyzer [ik] not found for field [message]
+ at org.elasticsearch.index.mapper.TypeParsers.parseAnalyzersAndTermVectors(TypeParsers.java:125) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.mapper.TypeParsers.parseTextField(TypeParsers.java:210) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.mapper.StringFieldMapper$TypeParser.parse(StringFieldMapper.java:312) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.mapper.ObjectMapper$TypeParser.parseProperties(ObjectMapper.java:281) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.mapper.ObjectMapper$TypeParser.parseObjectOrDocumentTypeProperties(ObjectMapper.java:203) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.mapper.RootObjectMapper$TypeParser.parse(RootObjectMapper.java:102) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.mapper.DocumentMapperParser.parse(DocumentMapperParser.java:111) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.mapper.DocumentMapperParser.parse(DocumentMapperParser.java:91) ~[elasticsearch-5.2.1.jar:5.2.1]
+ at org.elasticsearch.index.mapper.MapperService.internalMerge(MapperService.java:320) ~[elasticsearch-5.2.1.jar:5.2.1]
+ ... 10 more
+</code></pre>
+</div>
+
+<p>解决：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ule-business索引解决方式
+ 1：先关闭索引
+curl -XPOST 'ip:9200/my_index/_close?pretty'
+ 2：修改索引的setting
+ curl -XPUT 'ip:9200/my_index/_settings' -d '{
+    "analysis": {
+        "analyzer": {
+            "camel_analyzer": {
+                "type": "custom",
+                "tokenizer": "ik_smart"
+            }
+        },
+        "tokenizer": {
+            "my_tokenizer": {
+                "type": "whitespace",
+                "enable_lowercase": "false"
+            }
+        }
+    }
+}'
+   
+3：打开索引
+ curl -XPOST 'ip:9200/my_index/_open?pretty
+ 
+ule-webaccess索引解决方式
+ 
+ 1：先关闭索引
+curl -XPOST 'ip:9200/my_index/_close?pretty'
+ 2：修改索引的setting
+ curl -XPUT 'ip:9200/my_index/_settings' -d '{
+    "analysis": {
+        "analyzer": {
+            "ik": {
+                "type": "custom",
+                "tokenizer": "ik_smart"
+            }
+        }
+    }
+}'
+ 
+3：打开索引
+curl -XPOST 'ip:9200/my_index/_open?pretty'
+</code></pre>
+</div>
+
+<h3 id="5---2x客户端连接5x-es出现异常">5.   2.x客户端连接5.x ES出现异常</h3>
+
+<p>报错信息</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Received message from unsupported version: [2.0.0] minimal compatible version is: [5.0.0]
+</code></pre>
+</div>
+
+<p>解决：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>找到2.4的客户端升级到5.2
+</code></pre>
+</div>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                        
+                        <h2 id="similar_posts">Similar Posts</h2>
+                        <ul>
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/19/java-memory-analyzer/">Eclipse Memory Analyzer 堆转储文件分析
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+        
+            </ul>
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2017/06/05/java-memory/">java虚拟机内存分配</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2017/06/06/elasticsearch-config/">Elasticsearch 配置文件</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://localhost:4000/2017/06/06/elasticsearch-2.4-5.2/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://localhost:4000/2017/06/06/elasticsearch-2.4-5.2/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//dongbo.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+             本站记录我前端之旅的沿途风景！ 
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/db7689206@163.com" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:db7689206@163.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>        
+        </p>
+        <p>
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次，本站访客数<span id="busuanzi_value_site_uv"></span>人次，本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/">dongbo</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

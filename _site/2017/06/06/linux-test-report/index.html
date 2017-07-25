@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Linux 服务器性能测试报告</title>
+    <meta name="description" content="我们使用linux 工具sysbench 来测试linux服务器性能，目前在Ubuntu上进行操作">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://localhost:4000/2017/06/06/linux-test-report/">
+    <link rel="alternate" type="application/rss+xml" title="DongBo" href="http://localhost:4000/feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?cf8506e0ef223e57ff6239944e5d46a4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+    <script>
+    // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-72449510-4', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">DongBo</a>
+        <small>Front-end Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/demo/">
+                        
+                            <i class="fa fa-play"></i>Demo
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Linux 服务器性能测试报告</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-06-06
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#linux" title="Category: linux" rel="category">linux</a>&nbsp;
+    
+        <a href="/category/#test" title="Category: test" rel="category">test</a>&nbsp;
+    
+        <a href="/category/#report" title="Category: report" rel="category">report</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#linux" title="Tag: linux" rel="tag">linux</a-->
+        <a href="/tag/#linux" title="Tag: linux" rel="tag">linux</a>&nbsp;
+    
+        <!--a href="/tag/#test" title="Tag: test" rel="tag">test</a-->
+        <a href="/tag/#test" title="Tag: test" rel="tag">test</a>&nbsp;
+    
+        <!--a href="/tag/#report" title="Tag: report" rel="tag">report</a-->
+        <a href="/tag/#report" title="Tag: report" rel="tag">report</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#install-sysbench" id="markdown-toc-install-sysbench">Install sysbench</a></li>
+  <li><a href="#cpu-benchmark" id="markdown-toc-cpu-benchmark">CPU Benchmark</a></li>
+  <li><a href="#memory-benchmark" id="markdown-toc-memory-benchmark">Memory Benchmark</a></li>
+  <li><a href="#io-benchmark" id="markdown-toc-io-benchmark">IO Benchmark</a></li>
+</ul>
+
+<p>我们使用linux 工具sysbench 来测试linux服务器性能，目前在Ubuntu上进行操作</p>
+
+<h2 id="install-sysbench">Install sysbench</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install sysbench
+</code></pre>
+</div>
+
+<p>check it</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>man sysbench
+</code></pre>
+</div>
+
+<h2 id="cpu-benchmark">CPU Benchmark</h2>
+
+<p>测试CPU运行性能</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sysbench --test=cpu --cpu-max-prime=20000 run
+</code></pre>
+</div>
+
+<p>测试结果</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sysbench --test=cpu --cpu-max-prime=20000 run
+sysbench 0.4.12:  multi-threaded system evaluation benchmark
+Running the test with following options:
+Number of threads: 1
+Doing CPU performance benchmark
+Threads started!
+Done.
+Maximum prime number checked in CPU test: 20000
+ 
+Test execution summary:
+    total time:                          23.5990s
+    total number of events:              10000
+    total time taken by event execution: 23.5983
+    per-request statistics:
+         min:                                  2.34ms
+         avg:                                  2.36ms
+         max:                                  5.32ms
+         approx.  95 percentile:               2.41ms
+Threads fairness:
+    events (avg/stddev):           10000.0000/0.00
+    execution time (avg/stddev):   23.5983/0.00
+</code></pre>
+</div>
+
+<p>记录数据
+total time taken by event execution: 23.5983</p>
+
+<h2 id="memory-benchmark">Memory Benchmark</h2>
+
+<p>测试读性能</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sysbench --test=memory --memory-block-size=1K --memory-scope=global --memory-total-size=100G --memory-oper=read run
+</code></pre>
+</div>
+
+<p>测试结果</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sysbench --test=memory --memory-block-size=1K --memory-scope=global --memory-total-size=100G --memory-oper=read run
+sysbench 0.4.12: multi-threaded system evaluation benchmark
+ 
+Running the test with following options:
+Number of threads: 1
+ 
+Doing memory operations speed test
+Memory block size: 1K
+ 
+Memory transfer size: 102400M
+ 
+Memory operations type: read
+Memory scope type: global
+Threads started!
+Done.
+ 
+Operations performed: 104857600 (6045253.78 ops/sec)
+ 
+102400.00 MB transferred (5903.57 MB/sec)
+ 
+ 
+Test execution summary:
+total time: 17.3454s
+total number of events: 104857600
+total time taken by event execution: 12.1786
+per-request statistics:
+min: 0.00ms
+avg: 0.00ms
+max: 0.06ms
+approx. 95 percentile: 0.00ms
+ 
+Threads fairness:
+events (avg/stddev): 104857600.0000/0.00
+execution time (avg/stddev): 12.1786/0.00
+</code></pre>
+</div>
+
+<p>记录数据
+102400.00 MB transferred (5903.57 MB/sec)</p>
+
+<p>测试写性能</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sysbench --test=memory --memory-block-size=1K --memory-scope=global --memory-total-size=100G --memory-oper=write run
+</code></pre>
+</div>
+
+<p>测试结果</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ sysbench --test=memory --memory-block-size=1K --memory-scope=global --memory-total-size=100G --memory-oper=write run
+sysbench 0.4.12: multi-threaded system evaluation benchmark
+ 
+Running the test with following options:
+Number of threads: 1
+ 
+Doing memory operations speed test
+Memory block size: 1K
+ 
+Memory transfer size: 102400M
+ 
+Memory operations type: write
+Memory scope type: global
+Threads started!
+Done.
+ 
+Operations performed: 104857600 (4056443.11 ops/sec)
+ 
+102400.00 MB transferred (3961.37 MB/sec)
+ 
+ 
+Test execution summary:
+total time: 25.8496s
+total number of events: 104857600
+total time taken by event execution: 20.6986
+per-request statistics:
+min: 0.00ms
+avg: 0.00ms
+max: 0.08ms
+approx. 95 percentile: 0.00ms
+ 
+Threads fairness:
+events (avg/stddev): 104857600.0000/0.00
+execution time (avg/stddev): 20.6986/0.00
+</code></pre>
+</div>
+
+<p>记录结果</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>102400.00 MB transferred (3961.37 MB/sec)
+</code></pre>
+</div>
+
+<h2 id="io-benchmark">IO Benchmark</h2>
+
+<p>创建文件</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sysbench --test=fileio --file-total-size=1G prepare
+
+$ sysbench --test=fileio --file-total-size=1G prepare
+sysbench 0.4.12: multi-threaded system evaluation benchmark
+  
+128 files, 8192Kb each, 1024Mb total
+Creating files for the test...			
+</code></pre>
+</div>
+
+<p>测试读写性能</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sysbench --test=fileio --file-total-size=1G --file-test-mode=rndrw --init-rng=on --max-time=300 --max-requests=0 run
+
+$ sysbench --test=fileio --file-total-size=1G --file-test-mode=rndrw --init-rng=on --max-time=300 --max-requests=0 run
+sysbench 0.4.12: multi-threaded system evaluation benchmark
+ 
+Running the test with following options:
+Number of threads: 1
+Initializing random number generator from timer.
+ 
+ 
+Extra file open flags: 0
+128 files, 8Mb each
+1Gb total file size
+Block size 16Kb
+Number of random requests for random IO: 0
+Read/Write ratio for combined random IO test: 1.50
+Periodic FSYNC enabled, calling fsync() each 100 requests.
+Calling fsync() at the end of test, Enabled.
+Using synchronous I/O mode
+Doing random r/w test
+Threads started!
+Time limit exceeded, exiting...
+Done.
+ 
+Operations performed: 33000 Read, 22000 Write, 70340 Other = 125340 Total
+Read 515.62Mb Written 343.75Mb Total transferred 859.38Mb (2.8644Mb/sec)
+183.32 Requests/sec executed
+ 
+Test execution summary:
+total time: 300.0153s
+total number of events: 55000
+total time taken by event execution: 0.4013
+per-request statistics:
+min: 0.00ms
+avg: 0.01ms
+max: 0.10ms
+approx. 95 percentile: 0.01ms
+ 
+Threads fairness:
+events (avg/stddev): 55000.0000/0.00
+execution time (avg/stddev): 0.4013/0.00
+</code></pre>
+</div>
+
+<p>记录结果</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Read 515.62Mb Written 343.75Mb Total transferred 859.38Mb (2.8644Mb/sec)
+</code></pre>
+</div>
+
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+                    
+                
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2017/06/06/elasticsearch-install-x-pack/">Elasticsearch5.2.1扩展X-PACK实施流程</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2017/06/13/docker-Dockerfile-tmplate/">Dockerfile template</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://localhost:4000/2017/06/06/linux-test-report/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://localhost:4000/2017/06/06/linux-test-report/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//dongbo.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+             本站记录我前端之旅的沿途风景！ 
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/db7689206@163.com" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:db7689206@163.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>        
+        </p>
+        <p>
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次，本站访客数<span id="busuanzi_value_site_uv"></span>人次，本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/">dongbo</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

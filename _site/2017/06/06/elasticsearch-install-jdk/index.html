@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>ubuntu jdk 安装</title>
+    <meta name="description" content="ubuntu 上安装jdk">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://localhost:4000/2017/06/06/elasticsearch-install-jdk/">
+    <link rel="alternate" type="application/rss+xml" title="DongBo" href="http://localhost:4000/feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?cf8506e0ef223e57ff6239944e5d46a4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+    <script>
+    // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-72449510-4', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">DongBo</a>
+        <small>Front-end Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/demo/">
+                        
+                            <i class="fa fa-play"></i>Demo
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>ubuntu jdk 安装</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-06-06
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#ubuntu" title="Category: ubuntu" rel="category">ubuntu</a>&nbsp;
+    
+        <a href="/category/#java" title="Category: java" rel="category">java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#ubuntu" title="Tag: ubuntu" rel="tag">ubuntu</a-->
+        <a href="/tag/#ubuntu" title="Tag: ubuntu" rel="tag">ubuntu</a>&nbsp;
+    
+        <!--a href="/tag/#java" title="Tag: java" rel="tag">java</a-->
+        <a href="/tag/#java" title="Tag: java" rel="tag">java</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#方法一" id="markdown-toc-方法一">方法一：</a>    <ul>
+      <li><a href="#1下载jdk" id="markdown-toc-1下载jdk">1:下载jdk</a></li>
+      <li><a href="#2解压压缩包" id="markdown-toc-2解压压缩包">2:解压压缩包</a></li>
+      <li><a href="#3将jdk放入usrlocal目录下" id="markdown-toc-3将jdk放入usrlocal目录下">3:将jdk放入/usr/local/目录下</a></li>
+      <li><a href="#4编辑etcprofile文件-相当于添加windows的环境变量-在最后添加" id="markdown-toc-4编辑etcprofile文件-相当于添加windows的环境变量-在最后添加">4:编辑/etc/profile文件 相当于添加windows的环境变量 在最后添加</a></li>
+      <li><a href="#5使配置文件生效" id="markdown-toc-5使配置文件生效">5:使配置文件生效</a></li>
+      <li><a href="#6查看是否生效" id="markdown-toc-6查看是否生效">6::查看是否生效</a></li>
+    </ul>
+  </li>
+  <li><a href="#方法二推荐" id="markdown-toc-方法二推荐">方法二(推荐)：</a>    <ul>
+      <li><a href="#1下载" id="markdown-toc-1下载">1:下载</a></li>
+      <li><a href="#2解压" id="markdown-toc-2解压">2:解压</a></li>
+      <li><a href="#3追加-jdk-的-update-alternatives-方便多版本间切换" id="markdown-toc-3追加-jdk-的-update-alternatives-方便多版本间切换">3:追加 jdk 的 update-alternatives， 方便多版本间切换</a></li>
+      <li><a href="#4检查设置" id="markdown-toc-4检查设置">4：检查设置</a></li>
+      <li><a href="#5创建-etcprofiledoraclejdksh-初始化文件内容" id="markdown-toc-5创建-etcprofiledoraclejdksh-初始化文件内容">5:创建 /etc/profile.d/oraclejdk.sh 初始化文件,内容：</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>ubuntu 上安装jdk</p>
+
+<h2 id="方法一">方法一：</h2>
+
+<h3 id="1下载jdk">1:下载jdk</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo curl -o jdk-8u101.tar.gz -L --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.tar.gz//官网下载地址
+</code></pre>
+</div>
+
+<p>由于 Oracle 的下载页面必须要先点击接受用户协议才能下载, 所以我们用 curl 来模拟 cookie 的发送, 方能下载</p>
+
+<h3 id="2解压压缩包">2:解压压缩包</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>tar -zxvf jdk-xxx.tar.gz
+</code></pre>
+</div>
+
+<h3 id="3将jdk放入usrlocal目录下">3:将jdk放入/usr/local/目录下</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mv jdk-xxx /usr/local/java/
+</code></pre>
+</div>
+
+<h3 id="4编辑etcprofile文件-相当于添加windows的环境变量-在最后添加">4:编辑/etc/profile文件 相当于添加windows的环境变量 在最后添加</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>export JAVA_HOME=/usr/local/java/jdk-xxx
+export JRE_HOME=$JAVA_HOME/jre
+export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:$JRE_HOME/lib
+export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+</code></pre>
+</div>
+
+<h3 id="5使配置文件生效">5:使配置文件生效</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>source /etc/profile
+</code></pre>
+</div>
+
+<h3 id="6查看是否生效">6::查看是否生效</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>java -version
+</code></pre>
+</div>
+
+<h2 id="方法二推荐">方法二(推荐)：</h2>
+
+<h3 id="1下载">1:下载</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo curl -o jdk-xxx.tar.gz -L --cookie "oraclelicense=accept-securebackup-cookie" 	http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.tar.gz
+</code></pre>
+</div>
+
+<h3 id="2解压">2:解压</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>tar -xzvf jdk-8u101.tar.gz
+sudo mv ~/download/jdk1.8.0_101/ /usr/lib/jvm/
+</code></pre>
+</div>
+
+<h3 id="3追加-jdk-的-update-alternatives-方便多版本间切换">3:追加 jdk 的 update-alternatives， 方便多版本间切换</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk1.8.0_101/jre/bin/java 2000
+sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk1.8.0_101/bin/javac 2000
+</code></pre>
+</div>
+
+<h3 id="4检查设置">4：检查设置</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo update-alternatives --config java
+sudo update-alternatives --config javac
+</code></pre>
+</div>
+
+<h3 id="5创建-etcprofiledoraclejdksh-初始化文件内容">5:创建 /etc/profile.d/oraclejdk.sh 初始化文件,内容：</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_101
+export J2SDKDIR=/usr/lib/jvm/jdk1.8.0_101
+export J2REDIR=$JAVA_HOME/jre
+export PATH=$PATH:$JAVA_HOME/bin:$JAVA_HOME/db/bin:$JAVA_HOME/jre/bin
+export DERBY_HOME=$JAVA_HOME/db
+</code></pre>
+</div>
+
+<p>执行source /etc/profile.d/oraclejdk.sh 完成初始化</p>
+
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                        
+                        <h2 id="similar_posts">Similar Posts</h2>
+                        <ul>
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/19/java-memory-analyzer/">Eclipse Memory Analyzer 堆转储文件分析
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+                    
+                
+            
+                
+                    
+                
+                    
+                
+            
+        
+        
+            </ul>
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2017/06/06/elasticsearch-install-5.2/">Elasticsearch 5.2.1安装</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2017/06/06/elasticsearch-install-x-pack/">Elasticsearch5.2.1扩展X-PACK实施流程</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://localhost:4000/2017/06/06/elasticsearch-install-jdk/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://localhost:4000/2017/06/06/elasticsearch-install-jdk/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//dongbo.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+             本站记录我前端之旅的沿途风景！ 
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/db7689206@163.com" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:db7689206@163.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>        
+        </p>
+        <p>
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次，本站访客数<span id="busuanzi_value_site_uv"></span>人次，本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/">dongbo</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>

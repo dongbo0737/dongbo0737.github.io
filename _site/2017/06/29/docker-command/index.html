@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>docker常用命令记录</title>
+    <meta name="description" content="记录一些docker常用命令，以便随时查询">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_8v3czwksspqlg14i.css">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://localhost:4000/2017/06/29/docker-command/">
+    <link rel="alternate" type="application/rss+xml" title="DongBo" href="http://localhost:4000/feed.xml ">
+
+
+    <script>
+    // 百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?cf8506e0ef223e57ff6239944e5d46a4";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+
+    <script>
+    // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-72449510-4', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">DongBo</a>
+        <small>Front-end Dev Engineer</small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/tag/">
+                        
+                            <i class="fa fa-tags"></i>Tags
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/collection/">
+                        
+                            <i class="fa fa-bookmark"></i>Collections
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/demo/">
+                        
+                            <i class="fa fa-play"></i>Demo
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/about/">
+                        
+                            <i class="fa fa-heart"></i>About
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>docker常用命令记录</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-06-29
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#docker" title="Category: docker" rel="category">docker</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+            <div class="label-card">
+            
+<!-- <span class="point">•</span> -->
+<span class="pageTag">
+  <i class="fa fa-tags"></i>
+  
+    
+        <!--a href="/tag/#docker" title="Tag: docker" rel="tag">docker</a-->
+        <a href="/tag/#docker" title="Tag: docker" rel="tag">docker</a>
+    
+  
+
+</span>
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <ul id="markdown-toc">
+  <li><a href="#命令" id="markdown-toc-命令">命令</a>    <ul>
+      <li><a href="#docker构建镜像-t-打印日志到终端" id="markdown-toc-docker构建镜像-t-打印日志到终端">docker构建镜像，-t 打印日志到终端</a></li>
+      <li><a href="#运行一个docker容器" id="markdown-toc-运行一个docker容器">运行一个docker容器</a></li>
+      <li><a href="#删除1个docker容器" id="markdown-toc-删除1个docker容器">删除1个docker容器</a></li>
+      <li><a href="#启动一个nginx-docker-并绑定port" id="markdown-toc-启动一个nginx-docker-并绑定port">启动一个nginx docker 并绑定port</a></li>
+      <li><a href="#进入启动的docker容器-bash进入交互式shell环境" id="markdown-toc-进入启动的docker容器-bash进入交互式shell环境">进入启动的docker容器 bash进入交互式shell环境</a></li>
+      <li><a href="#将容器制作镜像" id="markdown-toc-将容器制作镜像">将容器制作镜像</a></li>
+      <li><a href="#存储镜像为1个tar包" id="markdown-toc-存储镜像为1个tar包">存储镜像为1个tar包</a></li>
+      <li><a href="#载入镜像" id="markdown-toc-载入镜像">载入镜像</a></li>
+      <li><a href="#将容器导出" id="markdown-toc-将容器导出">将容器导出</a></li>
+      <li><a href="#导入容器导入的容器会变成1个镜像" id="markdown-toc-导入容器导入的容器会变成1个镜像">导入容器,导入的容器会变成1个镜像</a></li>
+      <li><a href="#在docker-hub中查询ubuntu镜像" id="markdown-toc-在docker-hub中查询ubuntu镜像">在docker hub中查询ubuntu镜像</a>        <ul>
+          <li><a href="#挂载主机上的datadocker目录到optwebapp下" id="markdown-toc-挂载主机上的datadocker目录到optwebapp下">挂载主机上的/data/docker目录到/opt/webapp下</a></li>
+        </ul>
+      </li>
+      <li><a href="#创建1个数据卷容器" id="markdown-toc-创建1个数据卷容器">创建1个数据卷容器</a></li>
+      <li><a href="#挂载数据卷容器" id="markdown-toc-挂载数据卷容器">挂载数据卷容器</a></li>
+      <li><a href="#查询5星以上的spark镜像星级越高镜像越好" id="markdown-toc-查询5星以上的spark镜像星级越高镜像越好">查询5星以上的spark镜像，星级越高，镜像越好</a></li>
+      <li><a href="#批量停止docker-容器慎用" id="markdown-toc-批量停止docker-容器慎用">批量停止docker 容器,慎用！！</a></li>
+      <li><a href="#批量删除docker-容器慎用" id="markdown-toc-批量删除docker-容器慎用">批量删除docker 容器,慎用！！</a></li>
+      <li><a href="#批量删除docker镜像慎用" id="markdown-toc-批量删除docker镜像慎用">批量删除docker镜像,慎用！！</a></li>
+      <li><a href="#停止一个docker-容器" id="markdown-toc-停止一个docker-容器">停止一个docker 容器</a></li>
+      <li><a href="#开始一个docker容器" id="markdown-toc-开始一个docker容器">开始一个docker容器</a></li>
+      <li><a href="#拷贝本地数据到docker容器中" id="markdown-toc-拷贝本地数据到docker容器中">拷贝本地数据到docker容器中</a></li>
+      <li><a href="#查询日志" id="markdown-toc-查询日志">查询日志</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>记录一些docker常用命令，以便随时查询</p>
+
+<h2 id="命令">命令</h2>
+
+<h4 id="docker构建镜像-t-打印日志到终端">docker构建镜像，-t 打印日志到终端</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker build -t 名称：tag 目录
+
+docker  tag  $镜像ID或者镜像名称   127.0.0.1/docker-imager/ubuntu-ule:14.04  #（打标记）
+
+docker  push  127.0.0.1/docker-imager/ubuntu-ule:14.0
+</code></pre>
+</div>
+
+<h4 id="运行一个docker容器">运行一个docker容器</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker run -it 名称 
+</code></pre>
+</div>
+
+<h4 id="删除1个docker容器">删除1个docker容器</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker -rm 名称/id
+</code></pre>
+</div>
+
+<h4 id="启动一个nginx-docker-并绑定port">启动一个nginx docker 并绑定port</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker run --name webserver -d -p 80:80 nginx
+</code></pre>
+</div>
+
+<h4 id="进入启动的docker容器-bash进入交互式shell环境">进入启动的docker容器 bash进入交互式shell环境</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker exec -it dockerID bash
+</code></pre>
+</div>
+
+<p>● -it：这是两个参数，一个是 -i：交互式操作，一个是 -t 终端。我们这里打算进入 bash 执行一些命令并查看返回结果，因此我们需要交互式终端。
+  ● –rm：这个参数是说容器退出后随之将其删除。默认情况下，为了排障需求，退出的容器并不会立即删除，除非手动 docker rm。我们这里只是随便执行个命令，看看结果，不需要排障和保留结果，因此使用 –rm 可以避免浪费空间。
+  ● bash：放在镜像名后的是命令，这里我们希望有个交互式 Shell，因此用的是 bash。</p>
+
+<h4 id="将容器制作镜像">将容器制作镜像</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker commit -m 'Add a new file' -a 'dongbo' 容器id 镜像名称:tag
+</code></pre>
+</div>
+
+<h4 id="存储镜像为1个tar包">存储镜像为1个tar包</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker save -o myubuntu_14.04.tar myubuntu:14.04
+</code></pre>
+</div>
+
+<h4 id="载入镜像">载入镜像</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker load --input myubuntu_14.04.tar
+</code></pre>
+</div>
+
+<h4 id="将容器导出">将容器导出</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker export -o timer_docker.tar 容器id
+</code></pre>
+</div>
+
+<h4 id="导入容器导入的容器会变成1个镜像">导入容器,导入的容器会变成1个镜像</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker export -o timer_docker.tar f20e52f1b593
+</code></pre>
+</div>
+
+<p>docker import 和docker load的区别</p>
+
+<p>docker load是导入镜像到本地镜像库，docker import 导入一个容器快照到本地镜像库，容器快照将丢弃所有的历史记录和元数据信息，镜像存储会保存完整记录，体积也更大</p>
+
+<h4 id="在docker-hub中查询ubuntu镜像">在docker hub中查询ubuntu镜像</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker search -s 5 ubuntu 
+</code></pre>
+</div>
+
+<p>-s 指定星级，星级越高，镜像越好
+5表示只查询5星以上的ubuntu镜像</p>
+
+<h5 id="挂载主机上的datadocker目录到optwebapp下">挂载主机上的/data/docker目录到/opt/webapp下</h5>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker run -d -p 8080:8080  --name test-volums -v /data/docker:/opt/webapp myubuntu:14.04
+</code></pre>
+</div>
+
+<h4 id="创建1个数据卷容器">创建1个数据卷容器</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker run -it -v /dbdata --name dbdata myubuntu:14.04
+</code></pre>
+</div>
+
+<h4 id="挂载数据卷容器">挂载数据卷容器</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker run -it --volumes-from dbdata --name db2 myubuntu:14.04
+</code></pre>
+</div>
+
+<h4 id="查询5星以上的spark镜像星级越高镜像越好">查询5星以上的spark镜像，星级越高，镜像越好</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker search -s 5  spark
+</code></pre>
+</div>
+
+<h4 id="批量停止docker-容器慎用">批量停止docker 容器,慎用！！</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker stop $(docker ps -q)
+</code></pre>
+</div>
+
+<h4 id="批量删除docker-容器慎用">批量删除docker 容器,慎用！！</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker rm $(docker ps -qa)
+</code></pre>
+</div>
+
+<h4 id="批量删除docker镜像慎用">批量删除docker镜像,慎用！！</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker rmi $(docker images -qa)
+</code></pre>
+</div>
+
+<h4 id="停止一个docker-容器">停止一个docker 容器</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker stop dockerID 
+</code></pre>
+</div>
+
+<h4 id="开始一个docker容器">开始一个docker容器</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker start dockerID 
+</code></pre>
+</div>
+
+<h4 id="拷贝本地数据到docker容器中">拷贝本地数据到docker容器中</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker cp containerId:/path/xxx /host/path/target/xxx
+
+docker cp /host/path/target/xxx containerId:/path/xxx
+</code></pre>
+</div>
+
+<h4 id="查询日志">查询日志</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo docker logs -f containerId
+</code></pre>
+</div>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+                
+                    
+                        
+                        <h2 id="similar_posts">Similar Posts</h2>
+                        <ul>
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/rancher-logs-es/">Rancher日志搜集
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/rancher-install/">Rancher 安装和使用
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/harbor-install/">Harbor 安装和使用
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/docker-container-update/">切换docker root dir
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+            
+        
+            
+            
+                
+                    
+                        
+                        <li class="relatedPost">
+                            <a href="/2017/06/29/automatic-deployment/">Rancher实现自动化部署
+                            
+                            </a>
+                        </li>
+                        
+                        
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+            
+            
+                
+                    
+                
+            
+                
+                    
+                
+            
+        
+        
+            </ul>
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>上一篇</strong> <a href="/2017/06/29/automatic-deployment/">Rancher实现自动化部署</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>下一篇</strong> <a href="/2017/06/29/docker-container-update/">切换docker root dir</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://localhost:4000/2017/06/29/docker-command/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://localhost:4000/2017/06/29/docker-command/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//dongbo.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+            <!-- 其他div框放到这里 -->
+            <!-- <div class="side">bbbb</div> -->
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+             本站记录我前端之旅的沿途风景！ 
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/db7689206@163.com" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:db7689206@163.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>        
+        </p>
+        <p>
+            本站总访问量<span id="busuanzi_value_site_pv"></span>次，本站访客数<span id="busuanzi_value_site_uv"></span>人次，本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+            <span>
+                Theme designed by <a href="https://github.com/">dongbo</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" data-scroll>
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/smooth-scroll.min.js " charset="utf-8"></script>
+    <script type="text/javascript">
+      smoothScroll.init({
+        speed: 500, // Integer. How fast to complete the scroll in milliseconds
+        easing: 'easeInOutCubic', // Easing pattern to use
+        offset: 20, // Integer. How far to offset the scrolling anchor location in pixels
+      });
+    </script>
+    <!-- <script src=" /js/scroll.min.js " charset="utf-8"></script> -->
+  </body>
+
+</html>
