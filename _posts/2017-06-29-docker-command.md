@@ -24,9 +24,9 @@ tags: docker
 
 	docker build -t 名称：tag 目录
 
-	docker  tag  $镜像ID或者镜像名称   127.0.0.1/docker-imager/ubuntu-ule:14.04  #（打标记）
+	docker  tag  $镜像ID或者镜像名称   127.0.0.1/docker-imager/ubuntu:14.04  #（打标记）
 
-	docker  push  127.0.0.1/docker-imager/ubuntu-ule:14.0
+	docker  push  127.0.0.1/docker-imager/ubuntu:14.0
 
 #### 运行一个docker容器
 
