@@ -34,7 +34,7 @@ filebeat安装很简单，推荐使用tar包下载，解压
 	  publish_async: false #异步推送
 	  prospectors:
 	  - paths:
-	    - /data/logs/tomcat/ule-am.log #定义被收集的日志的路径
+	    - /data/logs/tomcat/test-am.log #定义被收集的日志的路径
 	    document_type: logs #文档乐行
 	    ignore_older: 24h # 忽略24小时之前的日志
 	    close_older: 1h
@@ -47,7 +47,7 @@ filebeat安装很简单，推荐使用tar包下载，解压
 	      server: tomcat
 	      ver: 1
 	      hostip: 127.0.0.1
-	      logname: ule-am
+	      logname: test-am
 	      module: dm
 	      assigner: DongBo
 	      logid: 1476203703774

@@ -25,7 +25,7 @@ business-*  可以匹配到 business-2017.05.01
 
 	{
 	  "order": 0,
-	  "template": "ule-business-*",
+	  "template": "test-business-*",
 	  "settings": {
 	    "index": {
 	      "routing": {
@@ -144,7 +144,7 @@ business-*  可以匹配到 business-2017.05.01
 
 	{
 	  "order": 0,
-	  "template": "ule-webaccess-*",
+	  "template": "test-webaccess-*",
 	  "settings": {
 	    "index": {
 	      "routing": {

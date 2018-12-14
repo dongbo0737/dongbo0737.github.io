@@ -54,11 +54,11 @@ Dockerfile定制：不可以有中文注释
 
 生成镜像
 
-	docker build -t dongbo01/ule-logstash:5.2.2 .
+	docker build -t dongbo01/test-logstash:5.2.2 .
 
 推送镜像到docker  hub 上
 
-	docker push  dongbo01/ule-logstash:5.2.2
+	docker push  dongbo01/test-logstash:5.2.2
 
 ### 配置文件
 

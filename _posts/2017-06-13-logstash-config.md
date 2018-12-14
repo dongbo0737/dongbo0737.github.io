@@ -230,7 +230,7 @@ logstash加载配置是循序加载
 	    kafka {
 	        bootstrap_servers => "172.25.156.113:9092,172.25.156.114:9092,172.25.156.115:9092"
 	        group_id => "clio-consr-weba-go1"#consumergroup
-	        topics => ["ule-webaccess"]#topic
+	        topics => ["test-webaccess"]#topic
 	        session_timeout_ms => "60000"#session超时
 	        request_timeout_ms => "180000"#request超时
 	        max_poll_records => "500"
@@ -258,12 +258,12 @@ logstash加载配置是循序加载
 	        init => "require 'time'"
 	        code => "event.set('processor_timestamp' , Time.now());event.set('lag' , Time.now().to_i-event.get('@timestamp').to_i)"#ruby计算时间差，进入logstash时间- filebeat抓取日志时间
 	    }
-	#进行kafka.topic判断，如果是app是audit,topic赋值为ule-audit，、
+	#进行kafka.topic判断，如果是app是audit,topic赋值为test-audit，、
 	#后面输入到es会根据topic 生成索引
-	    if [kafka][topic] == "ule-business" {
+	    if [kafka][topic] == "test-business" {
 	        if [app] == "audit" {
 	            mutate {
-	                update => { "[kafka][topic]" => "ule-audit" }
+	                update => { "[kafka][topic]" => "test-audit" }
 	            }
 	        }  else {
 	            mutate { 
@@ -287,7 +287,7 @@ apache日志接受处理
 
 	#apache日志过滤
 	filter {
-	    if [kafka][topic] == "ule-webaccess" {
+	    if [kafka][topic] == "test-webaccess" {
 	        grok {
 	#根据apache日志格式解析
 	            match => { "message" => "\"%{DATA:xforward}\" %{COMBINEDAPACHELOG} (?:%{NUMBER:duration:float}) (?:%{DATA:domain}) \"(?:%{DATA:protocol}|)\" \"(?:%{DATA:rawurlpath})\" \"(?:%{DATA:rawurlquery}|)\" (?:%{DATA:method}) (?:%{NUMBER:ibytes:int}) (?:%{NUMBER:obytes:int}) \"(?:%{DATA:uleck}|)\"" }
@@ -311,7 +311,7 @@ apache日志接受处理
 审计日志处理
 
 	filter {
-	    if [kafka][topic] == "ule-audit" {
+	    if [kafka][topic] == "test-audit" {
 	        grok {
 	#格式化日志信息
 	            match => { "message" => "%{TIMESTAMP_ISO8601:timestamp}" }

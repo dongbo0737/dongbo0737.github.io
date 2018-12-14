@@ -171,7 +171,7 @@ https://www.elastic.co/guide/en/elasticsearch/reference/5.2/rolling-upgrades.htm
 	 at org.elasticsearch.indices.IndicesService.createIndexService(IndicesService.java:425) ~[elasticsearch-5.2.1.jar:5.2.1]
 	 at org.elasticsearch.indices.IndicesService.verifyIndexMetadata(IndicesService.java:458) ~[elasticsearch-5.2.1.jar:5.2.1]
 	 at org.elasticsearch.cluster.metadata.MetaDataIndexStateService$2.execute(MetaDataIndexStateService.java:173) ~[elasticsearch-5.2.1.jar:5.2.1]
-	   [2017-02-28T10:04:11,039][WARN ][o.e.g.Gateway ] [dev211130] recovering index [ule-webaccess-2017.02.28/9vjPkRjdTzmwCrTtenJlaA] failed - recovering as closed
+	   [2017-02-28T10:04:11,039][WARN ][o.e.g.Gateway ] [dev211130] recovering index [test-webaccess-2017.02.28/9vjPkRjdTzmwCrTtenJlaA] failed - recovering as closed
 	 org.elasticsearch.index.mapper.MapperParsingException: Failed to parse mapping [logs]: analyzer [ik] not found for field [message]
 	 at org.elasticsearch.index.mapper.MapperService.internalMerge(MapperService.java:323) ~[elasticsearch-5.2.1.jar:5.2.1]
 	 at org.elasticsearch.index.mapper.MapperService.internalMerge(MapperService.java:277) ~[elasticsearch-5.2.1.jar:5.2.1]
@@ -199,7 +199,7 @@ https://www.elastic.co/guide/en/elasticsearch/reference/5.2/rolling-upgrades.htm
 解决：
  
 
-	ule-business索引解决方式
+	test-business索引解决方式
 	 1：先关闭索引
 	curl -XPOST 'ip:9200/my_index/_close?pretty'
 	 2：修改索引的setting
@@ -223,7 +223,7 @@ https://www.elastic.co/guide/en/elasticsearch/reference/5.2/rolling-upgrades.htm
 	3：打开索引
 	 curl -XPOST 'ip:9200/my_index/_open?pretty
 	 
-	ule-webaccess索引解决方式
+	test-webaccess索引解决方式
 	 
 	 1：先关闭索引
 	curl -XPOST 'ip:9200/my_index/_close?pretty'
