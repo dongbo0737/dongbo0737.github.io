@@ -176,6 +176,6 @@ x-pack默认账号:elastic 密码:changeme
 	curl -XPOST -u elastic 'localhost:9200/_xpack/security/user/dongbo' -d '{
 	  "password" : "123456",#需要在6位以上
 	  "full_name" : "dongbo",
-	  "email" : "dongbo01@ule.com",
+	  "email" : "db7689206@163.com",
 	  "roles" : [ "events_admin" ]
 	}'
